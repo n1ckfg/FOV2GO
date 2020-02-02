@@ -1,0 +1,19 @@
+STEREOSKOPIX
+Stereoskopix FOV2GO
+21.1 MB
+Version: 3.06 • Apr 12, 2013
+
+2.0 New version! Completely updated, lots of new features, full documentation.
+2.0.1 minor bug fixes, new gui textures
+2.0.2 added instructions/template PDF for iPad viewer (in Documentation folder)
+2.0.3 bug fixes & tweaks, updated manual
+split s3dGuiTexture.js into two scripts: s3dGuiTexture.js & s3dGuiCursor.js
+added androidDeviceSelector.js & iosDeviceSelector.js for automatic device selection
+2.0.4 added settings for Hasbro my3D
+2.0.5 added new templates for Holga/iPad viewer; added new S3D camera prefabs; updated manual
+3.0 New version! Unity 4.0 compatible. New scripts for dynamic control of stereoscopic parameters. Updated manual. New examples.
+3.02 bug fixes & updated manual.
+3.03 more bug fixes & improvements, updated manual
+3.04 fixed Android gyroscope bug, over/under format now available with Unity Free, package compatible with Unity 3.5 & 4, misc bug fixes
+3.05 fixed gyro script  Unity 4.1 bug
+3.06 fixed problems with demo scenes
