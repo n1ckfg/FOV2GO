@@ -48,6 +48,8 @@ public partial class s3dGuiTexture : MonoBehaviour
     public bool on;
     private float unitWidth;
     private s3dGuiCursor s3dCursor;
+    private float xWidth, xInset;
+
     public virtual IEnumerator Start()
     {
         this.findS3dCamera();
@@ -59,10 +61,11 @@ public partial class s3dGuiTexture : MonoBehaviour
         this.gameObject.layer = this.camera3D.leftOnlyLayer;
         this.objectCopyR.layer = this.camera3D.rightOnlyLayer;
         this.obPosition = this.gameObject.transform.position;
+        
         // if using stereo shader + side-by-side + not squeezed, double width of guiTexture
         if ((this.camera3D.useStereoShader && (this.camera3D.format3D == (mode3D) 0)) && !this.camera3D.sideBySideSqueezed)
         {
-            float xWidth = this.GetComponent<GUITexture>().pixelInset.width * 2;
+            xWidth = this.GetComponent<GUITexture>().pixelInset.width * 2;
 
             {
                 float _33 = xWidth;
@@ -77,7 +80,7 @@ public partial class s3dGuiTexture : MonoBehaviour
                 _36.width = _35;
                 this.objectCopyR.GetComponent<GUITexture>().pixelInset = _36;
             }
-            float xInset = this.gameObject.GetComponent<GUITexture>().pixelInset.width / -2;
+            xInset = this.gameObject.GetComponent<GUITexture>().pixelInset.width / -2;
 
             {
                 float _37 = xInset;

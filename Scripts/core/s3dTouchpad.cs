@@ -106,7 +106,7 @@ public partial class s3dTouchpad : MonoBehaviour
 
     public virtual void Update()
     {
-        Vector2 guiTouchPos = Input.mousePosition - this.guiTouchOffset;
+        Vector2 guiTouchPos = (Vector2) Input.mousePosition - this.guiTouchOffset;
         if (this.touchZone.Contains(Input.mousePosition))
         {
             if (Input.GetMouseButtonDown(0))

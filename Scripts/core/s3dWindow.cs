@@ -32,6 +32,8 @@ public partial class s3dWindow : MonoBehaviour
     private Camera rCam;
     private float cutInL;
     private float cutInR;
+    private Ray ray;
+
     public virtual void Start()
     {
         this.mainCam = (Camera) this.gameObject.GetComponent(typeof(Camera));
@@ -94,7 +96,7 @@ public partial class s3dWindow : MonoBehaviour
             int yy = 0;
             while (yy < this.sideSamples)
             {
-                Ray ray = this.lCam.ViewportPointToRay(new Vector3(1, yy / (this.sideSamples - 1f), 0)); // test lCam along right edge
+                ray = this.lCam.ViewportPointToRay(new Vector3(1, yy / (this.sideSamples - 1f), 0)); // test lCam along right edge
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
                     if (this.drawDebugRays)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public partial class s3dSmoothMouseLook : MonoBehaviour
@@ -29,9 +30,9 @@ public partial class s3dSmoothMouseLook : MonoBehaviour
     public float maximumY;
     private float rotationX;
     private float rotationY;
-    private object[] rotArrayX;
+    private List<float> rotArrayX;
     private float rotAverageX;
-    private object[] rotArrayY;
+    private List<float> rotArrayY;
     private float rotAverageY;
     private Quaternion xQuaternion;
     private Quaternion yQuaternion;
@@ -49,30 +50,30 @@ public partial class s3dSmoothMouseLook : MonoBehaviour
             }
             this.rotArrayY.Add(this.rotationY);
             this.rotArrayX.Add(this.rotationX);
-            if (this.rotArrayY.Length >= this.frameCounter)
+            if (this.rotArrayY.Count >= this.frameCounter)
             {
                 this.rotArrayY.RemoveAt(0);
             }
-            if (this.rotArrayX.Length >= this.frameCounter)
+            if (this.rotArrayX.Count >= this.frameCounter)
             {
                 this.rotArrayX.RemoveAt(0);
             }
             int j = 0;
-            while (j < this.rotArrayY.Length)
+            while (j < this.rotArrayY.Count)
             {
                 tempFloat = (float) this.rotArrayY[j];
                 this.rotAverageY = this.rotAverageY + tempFloat;
                 j++;
             }
             int i = 0;
-            while (i < this.rotArrayX.Length)
+            while (i < this.rotArrayX.Count)
             {
                 tempFloat = (float) this.rotArrayX[i];
                 this.rotAverageX = this.rotAverageX + tempFloat;
                 i++;
             }
-            this.rotAverageY = this.rotAverageY / this.rotArrayY.Length;
-            this.rotAverageX = this.rotAverageX / this.rotArrayX.Length;
+            this.rotAverageY = this.rotAverageY / this.rotArrayY.Count;
+            this.rotAverageX = this.rotAverageX / this.rotArrayX.Count;
             this.rotAverageY = Mathf.Clamp(this.rotAverageY, this.minimumY, this.maximumY);
             this.rotAverageX = Mathf.Clamp(this.rotAverageX % 360, this.minimumX, this.maximumX);
             this.yQuaternion = Quaternion.AngleAxis(this.rotAverageY, Vector3.left);
@@ -89,18 +90,18 @@ public partial class s3dSmoothMouseLook : MonoBehaviour
                     this.rotationX = this.rotationX + (Input.GetAxis("Mouse X") * this.sensitivityX);
                 }
                 this.rotArrayX.Add(this.rotationX);
-                if (this.rotArrayX.Length >= this.frameCounter)
+                if (this.rotArrayX.Count >= this.frameCounter)
                 {
                     this.rotArrayX.RemoveAt(0);
                 }
-                i = 0;
-                while (i < this.rotArrayX.Length)
+                int i = 0;
+                while (i < this.rotArrayX.Count)
                 {
                     tempFloat = (float) this.rotArrayX[i];
                     this.rotAverageX = this.rotAverageX + tempFloat;
                     i++;
                 }
-                this.rotAverageX = this.rotAverageX / this.rotArrayX.Length;
+                this.rotAverageX = this.rotAverageX / this.rotArrayX.Count;
                 this.rotAverageX = Mathf.Clamp(this.rotAverageX % 360, this.minimumX, this.maximumX);
                 this.xQuaternion = Quaternion.AngleAxis(this.rotAverageX, Vector3.up);
                 this.transform.localRotation = this.originalRotation * this.xQuaternion;
@@ -113,18 +114,18 @@ public partial class s3dSmoothMouseLook : MonoBehaviour
                     this.rotationY = this.rotationY + (Input.GetAxis("Mouse Y") * this.sensitivityY);
                 }
                 this.rotArrayY.Add(this.rotationY);
-                if (this.rotArrayY.Length >= this.frameCounter)
+                if (this.rotArrayY.Count >= this.frameCounter)
                 {
                     this.rotArrayY.RemoveAt(0);
                 }
-                j = 0;
-                while (j < this.rotArrayY.Length)
+                int j = 0;
+                while (j < this.rotArrayY.Count)
                 {
                     tempFloat = (float) this.rotArrayY[j];
                     this.rotAverageY = this.rotAverageY + tempFloat;
                     j++;
                 }
-                this.rotAverageY = this.rotAverageY / this.rotArrayY.Length;
+                this.rotAverageY = this.rotAverageY / this.rotArrayY.Count;
                 this.rotAverageY = Mathf.Clamp(this.rotAverageY % 360, this.minimumY, this.maximumY);
                 this.yQuaternion = Quaternion.AngleAxis(this.rotAverageY, Vector3.left);
                 this.transform.localRotation = this.originalRotation * this.yQuaternion;
@@ -153,8 +154,8 @@ public partial class s3dSmoothMouseLook : MonoBehaviour
         this.maximumX = 360f;
         this.minimumY = -60f;
         this.maximumY = 60f;
-        this.rotArrayX = new object[0];
-        this.rotArrayY = new object[0];
+        this.rotArrayX = new List<float>();
+        this.rotArrayY = new List<float>();
     }
 
 }

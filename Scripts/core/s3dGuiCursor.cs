@@ -66,6 +66,8 @@ public partial class s3dGuiCursor : MonoBehaviour
     public bool followActiveObject;
     private GameObject prevRolloverObject;
     private bool initialized;
+    private s3dInteractor actScript;
+
     public virtual void Start()
     {
         this.findS3dCamera();
@@ -309,7 +311,7 @@ public partial class s3dGuiCursor : MonoBehaviour
         }
         if (this.activeObj && (!gotHit || (this.activeObj != theHit.transform.gameObject))) // if there's currently an active object and there was a tap but no hit - then deactivate this object
         {
-            s3dInteractor actScript = (s3dInteractor) this.activeObj.GetComponent(typeof(s3dInteractor)); // or if there's currently an active object and there was a tap that hit another object - then deactivate this object
+            actScript = (s3dInteractor) this.activeObj.GetComponent(typeof(s3dInteractor)); // or if there's currently an active object and there was a tap that hit another object - then deactivate this object
             if (actScript)
             {
                 actScript.deactivateObject();

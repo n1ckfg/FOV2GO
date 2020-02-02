@@ -657,7 +657,7 @@ public partial class s3dCamera : MonoBehaviour
     }
 
     // Draw Render Textures Quads
-    public virtual void DrawQuad(object cam)
+    public virtual void DrawQuad(int cam)
     {
         if (this.format3D == mode3D.Anaglyph)
         {
