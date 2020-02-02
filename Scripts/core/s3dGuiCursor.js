@@ -69,9 +69,9 @@ private var initialized : boolean;
 function Start () {
 	findS3dCamera();
 	if (hidePointer) {
-		Screen.showCursor = false;
+		Cursor.visible = false;
 	} else {
-		Screen.showCursor = true;
+		Cursor.visible = true;
 	}
 }
 
@@ -89,12 +89,12 @@ function findS3dCamera () {
 function initialize() { // called from s3dGuiTexture on startup, after it's been initialized;
 	s3dTexture = gameObject.GetComponent(s3dGuiTexture);
 	if (trackMouseXYPosition || useTouchpad) {
-		var xInset : float = s3dTexture.guiTexture.pixelInset.width/-2;
-		var yInset : float = s3dTexture.guiTexture.pixelInset.height/-2;
-		s3dTexture.guiTexture.pixelInset.x = xInset;
-		s3dTexture.guiTexture.pixelInset.y = yInset;
-		s3dTexture.objectCopyR.guiTexture.pixelInset.x = xInset;
-		s3dTexture.objectCopyR.guiTexture.pixelInset.y = yInset;
+		var xInset : float = s3dTexture.GetComponent.<GUITexture>().pixelInset.width/-2;
+		var yInset : float = s3dTexture.GetComponent.<GUITexture>().pixelInset.height/-2;
+		s3dTexture.GetComponent.<GUITexture>().pixelInset.x = xInset;
+		s3dTexture.GetComponent.<GUITexture>().pixelInset.y = yInset;
+		s3dTexture.objectCopyR.GetComponent.<GUITexture>().pixelInset.x = xInset;
+		s3dTexture.objectCopyR.GetComponent.<GUITexture>().pixelInset.y = yInset;
 	}
 	
 	if (defaultTexture) setTexture(defaultTexture);
@@ -140,7 +140,7 @@ function castForObjects() {
 		dPosition = s3dTexture.obPosition;
 	}
 	var hit: RaycastHit;
-	var ray : Ray = camera3D.camera.ViewportPointToRay (dPosition);
+	var ray : Ray = camera3D.GetComponent.<Camera>().ViewportPointToRay (dPosition);
 	if (Physics.Raycast (ray, hit, 100.0)) {
 		Debug.DrawRay (ray.origin, ray.direction*hit.distance, Color(0,1,0,0));
 		// if there's currently an activeObj, notify it of hit position
@@ -157,7 +157,7 @@ function castForObjects() {
 		}	
 	}
 	// next, raycast against objects in interactive layer (for taps)
-	ray = camera3D.camera.ViewportPointToRay (dPosition);
+	ray = camera3D.GetComponent.<Camera>().ViewportPointToRay (dPosition);
 	
 	#if UNITY_EDITOR // if in editor & mouse button down
 	if (trackMouseXYPosition) {
@@ -219,7 +219,7 @@ function doTouchpad() {
 
 function processTap(theHit : RaycastHit, gotHit: boolean, tapType : int) {
 	setTexture(clickTexture);
-	if (clickSound) audio.PlayOneShot(clickSound);
+	if (clickSound) GetComponent.<AudioSource>().PlayOneShot(clickSound);
 	if (activeObj && (!gotHit || (activeObj != theHit.transform.gameObject))) { // if there's currently an active object and there was a tap but no hit - then deactivate this object
 		var actScript : s3dInteractor = activeObj.GetComponent(s3dInteractor); // or if there's currently an active object and there was a tap that hit another object - then deactivate this object
 		if (actScript) {
@@ -249,8 +249,8 @@ function processRollover (theHit : RaycastHit, onObject : boolean) {
 }
 
 function setTexture(tex : Texture) {
-	guiTexture.texture = tex;
-	if (s3dTexture.objectCopyR) s3dTexture.objectCopyR.guiTexture.texture = tex;
+	GetComponent.<GUITexture>().texture = tex;
+	if (s3dTexture.objectCopyR) s3dTexture.objectCopyR.GetComponent.<GUITexture>().texture = tex;
 }
 
 function unclickTexture() {
@@ -259,7 +259,7 @@ function unclickTexture() {
 		setTexture(defaultTexture);
 	} else {
 		setTexture(pickTexture);
-		if (pickSound) audio.PlayOneShot(pickSound);
+		if (pickSound) GetComponent.<AudioSource>().PlayOneShot(pickSound);
 	}
 }	
 

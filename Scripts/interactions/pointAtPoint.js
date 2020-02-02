@@ -21,7 +21,7 @@ function Update () {
 
 // aim at active object position OR at hit point
 function NewPosition (pos: Vector3) {
-	if (renderer.enabled) {
+	if (GetComponent.<Renderer>().enabled) {
 		if (smooth) {
 			// Look at and dampen the rotation
 			var rot : Quaternion = Quaternion.LookRotation(pos - transform.position);

@@ -50,7 +50,7 @@ function Start () {
 	cursorScript = cursorObj.GetComponent(s3dGuiCursor);	// Main Stereo Camera Script
 	startPos = transform.position; 
 	startRot = transform.rotation;
-	rigidbody.centerOfMass = customCenterOfMass;
+	GetComponent.<Rigidbody>().centerOfMass = customCenterOfMass;
 }
 
 function NewTap(params: TapParams) {
@@ -78,7 +78,7 @@ function NewTap(params: TapParams) {
 		}
 		springJoint.transform.position = params.hit.point;
 		if (attachToCenterOfMass) {
-			var anchor = transform.TransformDirection(rigidbody.centerOfMass) + rigidbody.transform.position;
+			var anchor = transform.TransformDirection(GetComponent.<Rigidbody>().centerOfMass) + GetComponent.<Rigidbody>().transform.position;
 			anchor = springJoint.transform.InverseTransformPoint(anchor);
 			springJoint.anchor = anchor;
 		} else {
@@ -87,7 +87,7 @@ function NewTap(params: TapParams) {
 		springJoint.spring = spring;
 		springJoint.damper = damper;
 		springJoint.maxDistance = distance;
-		springJoint.connectedBody = rigidbody;
+		springJoint.connectedBody = GetComponent.<Rigidbody>();
 		increaseSpringAfterPickup();
 		StartCoroutine ("DragObject");
 	} else {
@@ -132,8 +132,8 @@ function increaseSpringAfterPickup() {
 function NewPosition (pos: Vector3) {
 	var currentDistance : float;
 	if (activated) {
-		var viewPos : Vector3 = mainCamObj.camera.WorldToViewportPoint (pos);
-		var ray : Ray = mainCamObj.camera.ViewportPointToRay (viewPos);
+		var viewPos : Vector3 = mainCamObj.GetComponent.<Camera>().WorldToViewportPoint (pos);
+		var ray : Ray = mainCamObj.GetComponent.<Camera>().ViewportPointToRay (viewPos);
 		if (moveTowardsObject) {
 		 	currentDistance = Vector3.Distance(mainCamObj.transform.position, clickPosition);
 		 	currentDistance = Mathf.Clamp(currentDistance,minDist,maxDist);

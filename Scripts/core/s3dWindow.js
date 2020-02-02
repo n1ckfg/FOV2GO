@@ -33,8 +33,8 @@ private var cutInR : float = 0;
 function Start () {
 	mainCam = gameObject.GetComponent(Camera);
 	camScript = gameObject.GetComponent(s3dCamera);
-	lCam = camScript.leftCam.camera;
-	rCam = camScript.rightCam.camera;
+	lCam = camScript.leftCam.GetComponent.<Camera>();
+	rCam = camScript.rightCam.GetComponent.<Camera>();
 	var masks : GameObject = new GameObject("masks");
 	
 	leftMask = new GameObject ("leftMask");
@@ -48,9 +48,9 @@ function Start () {
 	leftMesh.normals = [Vector3.zero,Vector3.zero,Vector3.zero,Vector3.zero];
 	leftMesh.triangles = [0,2,1,0,3,2];
 	leftMesh.uv = [Vector2(0,1),Vector2(0,0),Vector2(1,0),Vector2(1,1)];
-	leftMask.renderer.material = new Material(Shader.Find("Self-Illumin/Diffuse"));
-	leftMask.renderer.material.color = Color(0,0,0,1);
-	leftMask.renderer.castShadows = false;
+	leftMask.GetComponent.<Renderer>().material = new Material(Shader.Find("Self-Illumin/Diffuse"));
+	leftMask.GetComponent.<Renderer>().material.color = Color(0,0,0,1);
+	leftMask.GetComponent.<Renderer>().castShadows = false;
 
 	rightMask = new GameObject ("rightMask");
 	rightMask.transform.parent = masks.transform;
@@ -63,18 +63,18 @@ function Start () {
 	rightMesh.normals = [Vector3.zero,Vector3.zero,Vector3.zero,Vector3.zero];
 	rightMesh.triangles = [0,2,1,0,3,2];
 	rightMesh.uv = [Vector2(0,1),Vector2(0,0),Vector2(1,0),Vector2(1,1)];
-	rightMask.renderer.material = new Material(Shader.Find("Self-Illumin/Diffuse"));
-	rightMask.renderer.material.color = Color(0,0,0,1);
-	rightMask.renderer.castShadows = false;
+	rightMask.GetComponent.<Renderer>().material = new Material(Shader.Find("Self-Illumin/Diffuse"));
+	rightMask.GetComponent.<Renderer>().material.color = Color(0,0,0,1);
+	rightMask.GetComponent.<Renderer>().castShadows = false;
 }
 
 function toggleVis(a) {
 	if (a) {
-		leftMask.renderer.enabled = true;
-		rightMask.renderer.enabled = true;
+		leftMask.GetComponent.<Renderer>().enabled = true;
+		rightMask.GetComponent.<Renderer>().enabled = true;
 	} else {
-		leftMask.renderer.enabled = false;
-		rightMask.renderer.enabled = false;
+		leftMask.GetComponent.<Renderer>().enabled = false;
+		rightMask.GetComponent.<Renderer>().enabled = false;
 	}
 }
 

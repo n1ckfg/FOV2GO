@@ -38,12 +38,12 @@ function NewTap(params: TapParams) {
 			if (!turned || !toggleTurn) {
 				goalRotation = endRotation;
 				rotate(transform.rotation,endRotation);
-				if (pivotSound) audio.PlayOneShot(pivotSound);
+				if (pivotSound) GetComponent.<AudioSource>().PlayOneShot(pivotSound);
 				turned = true;
 			} else {
 				goalRotation = startRotation;
 				rotate(transform.rotation,startRotation);
-				if (pivotSound) audio.PlayOneShot(pivotSound);
+				if (pivotSound) GetComponent.<AudioSource>().PlayOneShot(pivotSound);
 				turned = false;
 			}
 		}

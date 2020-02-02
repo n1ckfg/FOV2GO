@@ -549,10 +549,10 @@ function setPhoneLayout() {
 function setCameraRect(l : Vector4, r : Vector4) {
 	// don't mess with screen layout if stereoShader is being used for anaglyph, etc
 	if (!camera3D.useStereoShader) {
-		camera3D.leftCam.camera.rect = Rect(l.x, l.y, l.z, l.w);
-		camera3D.rightCam.camera.rect = Rect(r.x,r.y,r.z,r.w);
-		camera3D.leftViewRect = camera3D.RectToVector4(camera3D.leftCam.camera.rect);
-		camera3D.rightViewRect = camera3D.RectToVector4(camera3D.rightCam.camera.rect);
+		camera3D.leftCam.GetComponent.<Camera>().rect = Rect(l.x, l.y, l.z, l.w);
+		camera3D.rightCam.GetComponent.<Camera>().rect = Rect(r.x,r.y,r.z,r.w);
+		camera3D.leftViewRect = camera3D.RectToVector4(camera3D.leftCam.GetComponent.<Camera>().rect);
+		camera3D.rightViewRect = camera3D.RectToVector4(camera3D.rightCam.GetComponent.<Camera>().rect);
 	}
 }
 

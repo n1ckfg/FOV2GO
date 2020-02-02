@@ -69,26 +69,26 @@ function Start() {
 	objectCopyR.transform.parent = gameObject.transform.parent;
 	gameObject.name = gameObject.name+"_L";
 	gameObject.layer = camera3D.leftOnlyLayer;
-	gameObject.guiText.material.color = TextColor;
+	gameObject.GetComponent.<GUIText>().material.color = TextColor;
 	objectCopyR.layer = camera3D.rightOnlyLayer;
-	objectCopyR.gameObject.guiText.material.color = TextColor;
+	objectCopyR.gameObject.GetComponent.<GUIText>().material.color = TextColor;
 	if (shadowsOn) {
 		shadowL = Instantiate(objectCopyR.gameObject, transform.position, transform.rotation);
 		shadowL.name = gameObject.name+"_shadL";
 		shadowL.gameObject.layer = camera3D.leftOnlyLayer;
-		shadowL.guiText.material.color = ShadowColor; 
+		shadowL.GetComponent.<GUIText>().material.color = ShadowColor; 
 		shadowL.transform.parent = transform;
 		shadowR = Instantiate(objectCopyR.gameObject, transform.position, transform.rotation);
 		shadowR.name = gameObject.name+"_shadR";
 		shadowR.gameObject.layer = camera3D.rightOnlyLayer;
-		shadowR.guiText.material.color = ShadowColor; 
+		shadowR.GetComponent.<GUIText>().material.color = ShadowColor; 
 		shadowR.transform.parent = objectCopyR.transform;
 	}
 	obPosition = gameObject.transform.position;
 	setText(initString);
 	toggleVisible(beginVisible);
 	
-	var horizontalFOV : float = (2 * Mathf.Atan(Mathf.Tan((camera3D.camera.fieldOfView * Mathf.Deg2Rad) / 2) * camera3D.camera.aspect))*Mathf.Rad2Deg;
+	var horizontalFOV : float = (2 * Mathf.Atan(Mathf.Tan((camera3D.GetComponent.<Camera>().fieldOfView * Mathf.Deg2Rad) / 2) * camera3D.GetComponent.<Camera>().aspect))*Mathf.Rad2Deg;
 	unitWidth = Mathf.Tan(horizontalFOV/2*Mathf.Deg2Rad); // need unit width to calculate cursor depth when there's a HIT
 	screenWidth = unitWidth*camera3D.zeroPrlxDist*2;
 	
@@ -119,7 +119,7 @@ function Update() {
 		}
 		if (keepCloser) {
 			findDistanceUnderObject();
-			objectDistance = Mathf.Max(objectDistance,camera3D.camera.nearClipPlane);
+			objectDistance = Mathf.Max(objectDistance,camera3D.GetComponent.<Camera>().nearClipPlane);
 		}
 		setScreenParallax();
 		if (curScrnPrlx != scrnPrlx) {
@@ -141,10 +141,10 @@ function findDistanceUnderObject() {
 		dPosition = obPosition;
 	}
 	var hit: RaycastHit;
-	var ray : Ray = camera3D.camera.ViewportPointToRay (dPosition);
+	var ray : Ray = camera3D.GetComponent.<Camera>().ViewportPointToRay (dPosition);
 	if (Physics.Raycast (ray, hit, 100.0)) {
 		Debug.DrawRay (ray.origin, ray.direction*hit.distance, Color(0,1,0,1));
-		var camPlane : Plane = Plane(camera3D.camera.transform.forward, camera3D.camera.transform.position);
+		var camPlane : Plane = Plane(camera3D.GetComponent.<Camera>().transform.forward, camera3D.GetComponent.<Camera>().transform.position);
 		var thePoint = ray.GetPoint(hit.distance);
 		nearDistance = camPlane.GetDistanceToPoint(thePoint);
 	}
@@ -186,11 +186,11 @@ function toggleVisible(t : boolean) {
 }
 
 function setText(theText: String) {
-	gameObject.guiText.text =  theText;
-	if (objectCopyR) objectCopyR.guiText.text = theText;
+	gameObject.GetComponent.<GUIText>().text =  theText;
+	if (objectCopyR) objectCopyR.GetComponent.<GUIText>().text = theText;
 	if (shadowsOn) {
-		if (shadowL) shadowL.guiText.text = theText;
-		if (shadowR) shadowR.guiText.text = theText;
+		if (shadowL) shadowL.GetComponent.<GUIText>().text = theText;
+		if (shadowR) shadowR.GetComponent.<GUIText>().text = theText;
 	}
 }
 	

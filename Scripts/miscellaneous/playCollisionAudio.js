@@ -8,8 +8,8 @@ var pitchMax : float = 2.0;
 
 function OnCollisionEnter (collision: Collision) {
 	if (collision.relativeVelocity.magnitude > minimumMagnitude) {
-		audio.volume = collision.relativeVelocity.magnitude/30;
-		audio.pitch = Random.Range(pitchMin,pitchMax);
-    	audio.PlayOneShot(impactSound);
+		GetComponent.<AudioSource>().volume = collision.relativeVelocity.magnitude/30;
+		GetComponent.<AudioSource>().pitch = Random.Range(pitchMin,pitchMax);
+    	GetComponent.<AudioSource>().PlayOneShot(impactSound);
 	}
 }

@@ -63,8 +63,8 @@ function Update () {
 		findObjectDistance();
 	}
 	if (showScreenPlane) {
-		if (!camScript.planeZero.renderer.enabled) {
-			camScript.planeZero.renderer.enabled = true;
+		if (!camScript.planeZero.GetComponent.<Renderer>().enabled) {
+			camScript.planeZero.GetComponent.<Renderer>().enabled = true;
 		}
 		var cameraWidth : float = Mathf.Tan(camScript.horizontalFOV/2*Mathf.Deg2Rad)*camScript.zeroPrlxDist*2;
 		var cameraHeight : float = Mathf.Tan(camScript.verticalFOV/2*Mathf.Deg2Rad)*camScript.zeroPrlxDist*2;
@@ -72,14 +72,14 @@ function Update () {
   		camScript.planeZero.transform.localPosition = Vector3(0,0, camScript.zeroPrlxDist);
 		camScript.planeZero.transform.localScale = Vector3(screenSize.x,screenSize.y,0);
 	} else {
-		if (camScript.planeZero.renderer.enabled) {
-			camScript.planeZero.renderer.enabled = false;
+		if (camScript.planeZero.GetComponent.<Renderer>().enabled) {
+			camScript.planeZero.GetComponent.<Renderer>().enabled = false;
 		}
 	}
 	if (showNearFarPlanes) {
-		if (!camScript.planeNear.renderer.enabled) {
-			camScript.planeNear.renderer.enabled = true;
-			camScript.planeFar.renderer.enabled = true;
+		if (!camScript.planeNear.GetComponent.<Renderer>().enabled) {
+			camScript.planeNear.GetComponent.<Renderer>().enabled = true;
+			camScript.planeFar.GetComponent.<Renderer>().enabled = true;
 		}
 		var nearWidth : float = Mathf.Tan(camScript.horizontalFOV/2*Mathf.Deg2Rad)*nearDistance*2;
 		var nearHeight : float = Mathf.Tan(camScript.verticalFOV/2*Mathf.Deg2Rad)*nearDistance*2;
@@ -93,9 +93,9 @@ function Update () {
   		camScript.planeFar.transform.localPosition = Vector3(0,0, farDistance);
 		camScript.planeFar.transform.localScale = Vector3(farSize.x,farSize.y,0);
 	} else {
-		if (camScript.planeNear.renderer.enabled) {
-			camScript.planeNear.renderer.enabled = false;
-			camScript.planeFar.renderer.enabled = false;
+		if (camScript.planeNear.GetComponent.<Renderer>().enabled) {
+			camScript.planeNear.GetComponent.<Renderer>().enabled = false;
+			camScript.planeFar.GetComponent.<Renderer>().enabled = false;
 		}
 	}
 
@@ -156,7 +156,7 @@ function findDistanceUnderMousePosition() {
 function findObjectDistance() {
   	var planes = GeometryUtility.CalculateFrustumPlanes(mainCam);
   	//test whether object is on camera
-  	if (GeometryUtility.TestPlanesAABB(planes,selectedObject.collider.bounds)) { 
+  	if (GeometryUtility.TestPlanesAABB(planes,selectedObject.GetComponent.<Collider>().bounds)) { 
  		var vec : Vector3 = mainCam.WorldToViewportPoint(selectedObject.transform.position);
  		//alternate to bounds - just check object center
    		//if(vec.x>0 && vec.x<1 && vec.y>0 && vec.y<1 && vec.z>0) { 

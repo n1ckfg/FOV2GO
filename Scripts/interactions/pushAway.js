@@ -20,8 +20,8 @@ function NewTap(params: TapParams) {
 	if (params.tap == tapType || tapType == 3) {
 		var vec = transform.position - params.hit.point; // the direction from clickPoint to the rigidbody
 		vec = vec.normalized;
-		rigidbody.AddForce(vec*pushForce*100);
+		GetComponent.<Rigidbody>().AddForce(vec*pushForce*100);
 		var vec2 : Vector3 = new Vector3(Random.Range(-spinForce,spinForce), Random.Range(-spinForce,spinForce), Random.Range(-spinForce,spinForce));
-		rigidbody.AddRelativeTorque (vec2*100);
+		GetComponent.<Rigidbody>().AddRelativeTorque (vec2*100);
 	}
 }

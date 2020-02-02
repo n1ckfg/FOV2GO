@@ -42,7 +42,7 @@ function Start() {
 
 function NewTap(params: TapParams) {
 	if (params.tap == tapType || tapType == 3) {
-		if (clickSound) audio.PlayOneShot(clickSound);
+		if (clickSound) GetComponent.<AudioSource>().PlayOneShot(clickSound);
 		thisScript.switchLighting();
 	}
 } 
@@ -50,7 +50,7 @@ function NewTap(params: TapParams) {
 function switchLighting() {
 	roomLightOn = !roomLightOn;
 	if (roomLightOn) {
-        roomlight.light.intensity = roomlightIntensityOn;
+        roomlight.GetComponent.<Light>().intensity = roomlightIntensityOn;
         if (useSkyBox) {
 			#if UNITY_3_5        	
 				skyboxDay.active = true;
@@ -62,7 +62,7 @@ function switchLighting() {
         	#endif
         }	
 	} else {
-        roomlight.light.intensity = roomlightIntensityOff;
+        roomlight.GetComponent.<Light>().intensity = roomlightIntensityOff;
         if (useSkyBox) {
 			#if UNITY_3_5        	
         		skyboxDay.active = false;

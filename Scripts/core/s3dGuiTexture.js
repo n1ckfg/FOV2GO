@@ -61,26 +61,26 @@ function Start() {
 	obPosition = gameObject.transform.position;
 	// if using stereo shader + side-by-side + not squeezed, double width of guiTexture
 	if (camera3D.useStereoShader && camera3D.format3D == 0 && !camera3D.sideBySideSqueezed) {
-		var xWidth : float = guiTexture.pixelInset.width * 2;
-		gameObject.guiTexture.pixelInset.width = xWidth;
-		objectCopyR.guiTexture.pixelInset.width = xWidth;
-		var xInset : float = gameObject.guiTexture.pixelInset.width/-2;
-		gameObject.guiTexture.pixelInset.x = xInset;
-		objectCopyR.guiTexture.pixelInset.x = xInset;
+		var xWidth : float = GetComponent.<GUITexture>().pixelInset.width * 2;
+		gameObject.GetComponent.<GUITexture>().pixelInset.width = xWidth;
+		objectCopyR.GetComponent.<GUITexture>().pixelInset.width = xWidth;
+		var xInset : float = gameObject.GetComponent.<GUITexture>().pixelInset.width/-2;
+		gameObject.GetComponent.<GUITexture>().pixelInset.x = xInset;
+		objectCopyR.GetComponent.<GUITexture>().pixelInset.x = xInset;
 	// if not using stereo shader + squeezed, halve width of guiTexture
 	} else if (!camera3D.useStereoShader && camera3D.sideBySideSqueezed) {
-		xWidth = gameObject.guiTexture.pixelInset.width * 0.5;
-		gameObject.guiTexture.pixelInset.width = xWidth;
-		objectCopyR.guiTexture.pixelInset.width = xWidth;
-		xInset = gameObject.guiTexture.pixelInset.width/-2;
-		gameObject.guiTexture.pixelInset.x = xInset;
-		objectCopyR.guiTexture.pixelInset.x = xInset;
+		xWidth = gameObject.GetComponent.<GUITexture>().pixelInset.width * 0.5;
+		gameObject.GetComponent.<GUITexture>().pixelInset.width = xWidth;
+		objectCopyR.GetComponent.<GUITexture>().pixelInset.width = xWidth;
+		xInset = gameObject.GetComponent.<GUITexture>().pixelInset.width/-2;
+		gameObject.GetComponent.<GUITexture>().pixelInset.x = xInset;
+		objectCopyR.GetComponent.<GUITexture>().pixelInset.x = xInset;
 	}
 	// find corner offset
-	corner = Vector2(gameObject.guiTexture.pixelInset.width/2/Screen.width,gameObject.guiTexture.pixelInset.height/2/Screen.height);
+	corner = Vector2(gameObject.GetComponent.<GUITexture>().pixelInset.width/2/Screen.width,gameObject.GetComponent.<GUITexture>().pixelInset.height/2/Screen.height);
 	toggleVisible(beginVisible);
 		
-	var horizontalFOV : float = (2 * Mathf.Atan(Mathf.Tan((camera3D.camera.fieldOfView * Mathf.Deg2Rad) / 2) * camera3D.camera.aspect))*Mathf.Rad2Deg;
+	var horizontalFOV : float = (2 * Mathf.Atan(Mathf.Tan((camera3D.GetComponent.<Camera>().fieldOfView * Mathf.Deg2Rad) / 2) * camera3D.GetComponent.<Camera>().aspect))*Mathf.Rad2Deg;
 	unitWidth = Mathf.Tan(horizontalFOV/2*Mathf.Deg2Rad); // need unit width to calculate cursor depth when there's a HIT (horizontal image transform)
 	screenWidth = unitWidth*camera3D.zeroPrlxDist*2;
 	setScreenParallax();
@@ -149,10 +149,10 @@ function findDistanceUnderObject() {
 	// raycast against all objects
 	for (var cor=0; cor<5; cor++) {
 		var hit: RaycastHit;
-		var ray : Ray = camera3D.camera.ViewportPointToRay (checkpoints[cor]);
+		var ray : Ray = camera3D.GetComponent.<Camera>().ViewportPointToRay (checkpoints[cor]);
 		if (Physics.Raycast (ray, hit, 100.0)) {
 			Debug.DrawRay (ray.origin, ray.direction*hit.distance, Color(0,1,0,1));
-			var camPlane : Plane = Plane(camera3D.camera.transform.forward, camera3D.camera.transform.position);
+			var camPlane : Plane = Plane(camera3D.GetComponent.<Camera>().transform.forward, camera3D.GetComponent.<Camera>().transform.position);
 			var thePoint = ray.GetPoint(hit.distance);
 			var currentDistance = camPlane.GetDistanceToPoint(thePoint);
 			if (currentDistance < nearDistance) {
@@ -163,7 +163,7 @@ function findDistanceUnderObject() {
 	if (nearDistance < Mathf.Infinity) {
 		objectDistance = Mathf.Clamp(nearDistance,minimumDistance,maximumDistance);
 	}
-	objectDistance = Mathf.Max(objectDistance,camera3D.camera.nearClipPlane);
+	objectDistance = Mathf.Max(objectDistance,camera3D.GetComponent.<Camera>().nearClipPlane);
 	setScreenParallax();
 }
 
