@@ -12,6 +12,9 @@ using System.Collections;
 [UnityEditor.CustomEditor(typeof(s3dTouchpad))]
 public class s3dTouchpadEditor : Editor
 {
+
+    private s3dTouchpad target;
+
     public override void OnInspectorGUI()
     {
         EditorGUILayout.BeginVertical("box", new GUILayoutOption[] {});

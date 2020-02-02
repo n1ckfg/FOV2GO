@@ -13,6 +13,9 @@ using System.Collections;
 public class s3dGuiCursorEditor : Editor
 {
     public bool showFileFields;
+
+    private s3dGuiCursor target;
+
     public override void OnInspectorGUI()
     {
         bool allowSceneObjects = !EditorUtility.IsPersistent(this.target);
@@ -29,7 +32,7 @@ public class s3dGuiCursorEditor : Editor
         if (this.target.useTouchpad != null)
         {
             EditorGUI.indentLevel = 1;
-            this.target.touchpad = EditorGUILayout.ObjectField(new GUIContent("Touchpad", "Assign s3d Touchpad"), this.target.touchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            this.target.touchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Touchpad", "Assign s3d Touchpad"), this.target.touchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             this.target.touchpadSpeed = EditorGUILayout.Vector2Field("Touchpad Speed Factor", this.target.touchpadSpeed, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
@@ -40,11 +43,11 @@ public class s3dGuiCursorEditor : Editor
         if (this.showFileFields)
         {
             EditorGUI.indentLevel = 1;
-            this.target.defaultTexture = EditorGUILayout.ObjectField(new GUIContent("Default Texture", "Default Texture"), this.target.defaultTexture, typeof(Texture), allowSceneObjects, new GUILayoutOption[] {});
-            this.target.clickSound = EditorGUILayout.ObjectField(new GUIContent("Click Sound", "Sound for click"), this.target.clickSound, typeof(AudioClip), allowSceneObjects, new GUILayoutOption[] {});
-            this.target.clickTexture = EditorGUILayout.ObjectField(new GUIContent("Click Texture", "Texture for clicks"), this.target.clickTexture, typeof(Texture), allowSceneObjects, new GUILayoutOption[] {});
-            this.target.pickSound = EditorGUILayout.ObjectField(new GUIContent("Pick Sound", "Sound for select"), this.target.pickSound, typeof(AudioClip), allowSceneObjects, new GUILayoutOption[] {});
-            this.target.pickTexture = EditorGUILayout.ObjectField(new GUIContent("Pick Texture", "Texture for select"), this.target.pickTexture, typeof(Texture), allowSceneObjects, new GUILayoutOption[] {});
+            this.target.defaultTexture = (Texture) EditorGUILayout.ObjectField(new GUIContent("Default Texture", "Default Texture"), this.target.defaultTexture, typeof(Texture), allowSceneObjects, new GUILayoutOption[] {});
+            this.target.clickSound = (AudioClip) EditorGUILayout.ObjectField(new GUIContent("Click Sound", "Sound for click"), this.target.clickSound, typeof(AudioClip), allowSceneObjects, new GUILayoutOption[] {});
+            this.target.clickTexture = (Texture) EditorGUILayout.ObjectField(new GUIContent("Click Texture", "Texture for clicks"), this.target.clickTexture, typeof(Texture), allowSceneObjects, new GUILayoutOption[] {});
+            this.target.pickSound = (AudioClip) EditorGUILayout.ObjectField(new GUIContent("Pick Sound", "Sound for select"), this.target.pickSound, typeof(AudioClip), allowSceneObjects, new GUILayoutOption[] {});
+            this.target.pickTexture = (Texture) EditorGUILayout.ObjectField(new GUIContent("Pick Texture", "Texture for select"), this.target.pickTexture, typeof(Texture), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
         EditorGUILayout.EndVertical();

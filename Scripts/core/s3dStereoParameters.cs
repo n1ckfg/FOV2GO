@@ -15,7 +15,7 @@ using System.Collections;
 public partial class s3dStereoParameters : MonoBehaviour
 {
     private s3dCamera camera3D;
-    private s3dDeviceManager s3dDeviceMan;
+    public s3dDeviceManager s3dDeviceMan;
     public s3dTouchpad stereoParamsTouchpad;
     public bool saveStereoParamsToDisk;
     public Texture2D showStereoParamsTexture;

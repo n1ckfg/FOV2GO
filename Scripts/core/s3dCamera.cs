@@ -90,7 +90,9 @@ public partial class s3dCamera : MonoBehaviour
     public int checkerboardColumns;
     public int checkerboardRows;
     public Plane[] planes;
+
     private bool initialized;
+
     public virtual void Awake()
     {
         this.initStereoCamera();

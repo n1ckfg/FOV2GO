@@ -14,6 +14,9 @@ using System.Collections;
 public class s3dWindowEditor : Editor
 {
     public static bool foldout1;
+
+    private s3dWindow target;
+
     public override void OnInspectorGUI()
     {
         s3dWindowEditor.foldout1 = EditorGUILayout.Foldout(s3dWindowEditor.foldout1, "Options");
@@ -28,8 +31,8 @@ public class s3dWindowEditor : Editor
             }
             GUI.changed = false;
             this.target.drawDebugRays = EditorGUILayout.Toggle("Draw Debug Rays", this.target.drawDebugRays, new GUILayoutOption[] {});
-            this.target.sideSamples = EditorGUILayout.Slider("Side Samples", (float) this.target.sideSamples, 3, 50, new GUILayoutOption[] {});
-            this.target.maskLimit = EditorGUILayout.EnumPopup("Mask Limit", this.target.maskLimit, new GUILayoutOption[] {});
+            this.target.sideSamples = (int) EditorGUILayout.Slider("Side Samples", (float) this.target.sideSamples, 3, 50, new GUILayoutOption[] {});
+            this.target.maskLimit = (maskDistance) EditorGUILayout.EnumPopup("Mask Limit", this.target.maskLimit, new GUILayoutOption[] {});
             if (this.target.maskLimit == 0)
             {
                 this.target.maximumDistance = EditorGUILayout.Slider("Maximum Distance", (float) this.target.maximumDistance, 0, 50, new GUILayoutOption[] {});

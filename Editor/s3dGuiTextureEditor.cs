@@ -13,6 +13,9 @@ using System.Collections;
 public class s3dGuiTextureEditor : Editor
 {
     public bool showFileFields;
+
+    private s3dGuiTexture target;
+
     public override void OnInspectorGUI()
     {
         bool allowSceneObjects = !EditorUtility.IsPersistent(this.target);

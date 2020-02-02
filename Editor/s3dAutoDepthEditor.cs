@@ -12,9 +12,12 @@ using System.Collections;
 [UnityEditor.CustomEditor(typeof(s3dAutoDepth))]
 public class s3dAutoDepthEditor : Editor
 {
+
+    private s3dAutoDepth target;
+
     public override void OnInspectorGUI()
     {
-        this.target.convergenceMethod = EditorGUILayout.EnumPopup(new GUIContent("Convergence Method", "Pick dynamic convergence method"), this.target.convergenceMethod, new GUILayoutOption[] {});
+        this.target.convergenceMethod = (converge) EditorGUILayout.EnumPopup(new GUIContent("Convergence Method", "Pick dynamic convergence method"), this.target.convergenceMethod, new GUILayoutOption[] {});
         this.target.autoInteraxial = EditorGUILayout.Toggle(new GUIContent("Auto Interaxial", "Use dynamic interaxial"), this.target.autoInteraxial, new GUILayoutOption[] {});
         this.target.parallaxPercentageOfWidth = EditorGUILayout.Slider(new GUIContent("Parallax Percentage", "Total parallax percentage of image width"), (float) this.target.parallaxPercentageOfWidth, 1, 100, new GUILayoutOption[] {});
         this.target.percentageNegativeParallax = EditorGUILayout.Slider(new GUIContent("Negative/Positive Ratio", "Ratio of negative to positive parallax"), (float) this.target.percentageNegativeParallax, 0, 100, new GUILayoutOption[] {});

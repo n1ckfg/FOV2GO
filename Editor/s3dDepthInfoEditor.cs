@@ -12,6 +12,9 @@ using System.Collections;
 [UnityEditor.CustomEditor(typeof(s3dDepthInfo))]
 public class s3dDepthInfoEditor : Editor
 {
+
+    private s3dDepthInfo target;
+
     public override void OnInspectorGUI()
     {
         EditorGUIUtility.LookLikeControls(120, 30);
@@ -30,7 +33,7 @@ public class s3dDepthInfoEditor : Editor
         EditorGUIUtility.LookLikeControls(130, 70);
         this.target.showNearFarPlanes = EditorGUILayout.Toggle(new GUIContent("Show Near/Far Planes ", "Translucent Plane at Near/Far Dist"), this.target.showNearFarPlanes, new GUILayoutOption[] {});
         EditorGUIUtility.LookLikeControls(90, 70);
-        this.target.selectedObject = EditorGUILayout.ObjectField("Selected Object", this.target.selectedObject, typeof(GameObject), allowSceneObjects, new GUILayoutOption[] {});
+        this.target.selectedObject = (GameObject) EditorGUILayout.ObjectField("Selected Object", this.target.selectedObject, typeof(GameObject), allowSceneObjects, new GUILayoutOption[] {});
         EditorGUILayout.EndHorizontal();
         Rect r = EditorGUILayout.BeginVertical("TextField", new GUILayoutOption[] {});
         EditorGUILayout.BeginHorizontal(new GUILayoutOption[] {});

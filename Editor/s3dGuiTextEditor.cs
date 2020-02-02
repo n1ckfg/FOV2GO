@@ -15,6 +15,9 @@ public class s3dGuiTextEditor : Editor
     public static bool foldout1;
     public static bool foldout2;
     public static bool foldout3;
+
+    private s3dGuiText target;
+
     public override void OnInspectorGUI()
     {
         bool allowSceneObjects = !EditorUtility.IsPersistent(this.target);
