@@ -21,45 +21,45 @@ public class s3dCameraEditor : Editor
     public override void OnInspectorGUI()
     {
         EditorGUIUtility.LookLikeControls(110, 30);
-        bool allowSceneObjects = !EditorUtility.IsPersistent(this.target);
+        bool allowSceneObjects = !EditorUtility.IsPersistent(target);
         s3dCameraEditor.foldout1 = EditorGUILayout.Foldout(s3dCameraEditor.foldout1, new GUIContent("Stereo Parameters", "Configure stereo camera"));
         if (s3dCameraEditor.foldout1)
         {
             EditorGUILayout.BeginVertical("box", new GUILayoutOption[] {});
-            this.target.interaxial = EditorGUILayout.IntSlider(new GUIContent("Interaxial (mm)", "Distance (in millimeters) between cameras."), (int) this.target.interaxial, 0, 1000, new GUILayoutOption[] {});
-            this.target.zeroPrlxDist = EditorGUILayout.Slider(new GUIContent("Zero Prlx Dist (M)", "Distance (in meters) at which left and right images overlap exactly."), (float) this.target.zeroPrlxDist, 0.1f, 100, new GUILayoutOption[] {});
-            this.target.toedIn = EditorGUILayout.Toggle(new GUIContent("Toed-In ", "Angle cameras inward to converge. Bad idea!"), this.target.toedIn, new GUILayoutOption[] {});
-            this.target.cameraSelect = (cams3D) EditorGUILayout.EnumPopup(new GUIContent("Camera Order", "Swap cameras for cross-eyed free-viewing."), this.target.cameraSelect, new GUILayoutOption[] {});
-            this.target.H_I_T = EditorGUILayout.Slider(new GUIContent("H I T", "horizontal image transform (default 0)"), (float) this.target.H_I_T, -25, 25, new GUILayoutOption[] {});
+            target.interaxial = EditorGUILayout.IntSlider(new GUIContent("Interaxial (mm)", "Distance (in millimeters) between cameras."), (int) target.interaxial, 0, 1000, new GUILayoutOption[] {});
+            target.zeroPrlxDist = EditorGUILayout.Slider(new GUIContent("Zero Prlx Dist (M)", "Distance (in meters) at which left and right images overlap exactly."), (float) target.zeroPrlxDist, 0.1f, 100, new GUILayoutOption[] {});
+            target.toedIn = EditorGUILayout.Toggle(new GUIContent("Toed-In ", "Angle cameras inward to converge. Bad idea!"), target.toedIn, new GUILayoutOption[] {});
+            target.cameraSelect = (cams3D) EditorGUILayout.EnumPopup(new GUIContent("Camera Order", "Swap cameras for cross-eyed free-viewing."), target.cameraSelect, new GUILayoutOption[] {});
+            target.H_I_T = EditorGUILayout.Slider(new GUIContent("H I T", "horizontal image transform (default 0)"), (float) target.H_I_T, -25, 25, new GUILayoutOption[] {});
             EditorGUILayout.EndVertical();
         }
         s3dCameraEditor.foldout2 = EditorGUILayout.Foldout(s3dCameraEditor.foldout2, new GUIContent("Stereo Render", "Configure display format"));
         if (s3dCameraEditor.foldout2)
         {
             EditorGUILayout.BeginVertical("box", new GUILayoutOption[] {});
-            this.target.useStereoShader = EditorGUILayout.Toggle(new GUIContent("Stereo Shader (Pro)", "Enable for anaglyph and other modes. Unity Pro required. Not necessary for side-by-side."), this.target.useStereoShader, new GUILayoutOption[] {});
-            this.target.format3D = (mode3D) EditorGUILayout.EnumPopup(new GUIContent("Stereo Format", "Select 3D render format."), this.target.format3D, new GUILayoutOption[] {});
-            if ((this.target.format3D == (mode3D) 0) || (this.target.format3D == (mode3D) 2)) // side by side
+            target.useStereoShader = EditorGUILayout.Toggle(new GUIContent("Stereo Shader (Pro)", "Enable for anaglyph and other modes. Unity Pro required. Not necessary for side-by-side."), target.useStereoShader, new GUILayoutOption[] {});
+            target.format3D = (mode3D) EditorGUILayout.EnumPopup(new GUIContent("Stereo Format", "Select 3D render format."), target.format3D, new GUILayoutOption[] {});
+            if ((target.format3D == (mode3D) 0) || (target.format3D == (mode3D) 2)) // side by side
             {
-                if (this.target.format3D == 0)
+                if (target.format3D == (mode3D) 0)
                 {
-                    this.target.sideBySideSqueezed = EditorGUILayout.Toggle(new GUIContent("Squeezed", "For 3D TV frame-compatible format"), this.target.sideBySideSqueezed, new GUILayoutOption[] {});
+                    target.sideBySideSqueezed = EditorGUILayout.Toggle(new GUIContent("Squeezed", "For 3D TV frame-compatible format"), target.sideBySideSqueezed, new GUILayoutOption[] {});
                 }
                 else
                 {
-                    if (this.target.format3D == (mode3D) 2)
+                    if (target.format3D == (mode3D) 2)
                     {
-                        this.target.overUnderStretched = EditorGUILayout.Toggle(new GUIContent("Stretched", "For 3D TV frame-compatible format"), this.target.overUnderStretched, new GUILayoutOption[] {});
+                        target.overUnderStretched = EditorGUILayout.Toggle(new GUIContent("Stretched", "For 3D TV frame-compatible format"), target.overUnderStretched, new GUILayoutOption[] {});
                     }
                 }
-                if (this.target.useStereoShader == null)
+                if (target.useStereoShader == null)
                 {
-                    this.target.usePhoneMask = EditorGUILayout.Toggle(new GUIContent("Use Phone Mask", "Mask for side-by-side mobile phone formats"), this.target.usePhoneMask, new GUILayoutOption[] {});
-                    if (this.target.usePhoneMask != null)
+                    target.usePhoneMask = EditorGUILayout.Toggle(new GUIContent("Use Phone Mask", "Mask for side-by-side mobile phone formats"), target.usePhoneMask, new GUILayoutOption[] {});
+                    if (target.usePhoneMask != null)
                     {
                         EditorGUI.indentLevel = 1;
-                        this.target.leftViewRect = EditorGUILayout.Vector4Field("Left View Rect (x y width height)", this.target.leftViewRect, new GUILayoutOption[] {});
-                        this.target.rightViewRect = EditorGUILayout.Vector4Field("Right View Rect (x y width height)", this.target.rightViewRect, new GUILayoutOption[] {});
+                        target.leftViewRect = EditorGUILayout.Vector4Field("Left View Rect (x y width height)", target.leftViewRect, new GUILayoutOption[] {});
+                        target.rightViewRect = EditorGUILayout.Vector4Field("Right View Rect (x y width height)", target.rightViewRect, new GUILayoutOption[] {});
                         EditorGUI.indentLevel = 0;
                     }
                 }
@@ -70,40 +70,40 @@ public class s3dCameraEditor : Editor
             else
             {
                 //target.usePhoneMask = false;
-                if (this.target.format3D == (mode3D) 1) // anaglyph
+                if (target.format3D == (mode3D) 1) // anaglyph
                 {
-                    this.target.anaglyphOptions = (anaType) EditorGUILayout.EnumPopup(new GUIContent("Anaglyph Mode", "Anaglyph color formats"), this.target.anaglyphOptions, new GUILayoutOption[] {});
+                    target.anaglyphOptions = (anaType) EditorGUILayout.EnumPopup(new GUIContent("Anaglyph Mode", "Anaglyph color formats"), target.anaglyphOptions, new GUILayoutOption[] {});
                 }
                 else
                 {
-                    if (this.target.format3D == (mode3D) 3) // interlace
+                    if (target.format3D == (mode3D) 3) // interlace
                     {
-                        this.target.interlaceRows = EditorGUILayout.IntSlider(new GUIContent("Rows", "Vertical resolution for interlace format"), (int) this.target.interlaceRows, 1, 1080, new GUILayoutOption[] {});
+                        target.interlaceRows = EditorGUILayout.IntSlider(new GUIContent("Rows", "Vertical resolution for interlace format"), (int) target.interlaceRows, 1, 1080, new GUILayoutOption[] {});
                     }
                     else
                     {
-                        if (this.target.format3D == (mode3D) 4) // checkerboard
+                        if (target.format3D == (mode3D) 4) // checkerboard
                         {
-                            this.target.checkerboardColumns = EditorGUILayout.IntSlider(new GUIContent("Columns", "Horizontal resolution for checkerboard format"), (int) this.target.checkerboardColumns, 1, 1920, new GUILayoutOption[] {});
-                            this.target.checkerboardRows = EditorGUILayout.IntSlider(new GUIContent("Rows", "Vertical resolution for checkerboard format"), (int) this.target.checkerboardRows, 1, 1080, new GUILayoutOption[] {});
+                            target.checkerboardColumns = EditorGUILayout.IntSlider(new GUIContent("Columns", "Horizontal resolution for checkerboard format"), (int) target.checkerboardColumns, 1, 1920, new GUILayoutOption[] {});
+                            target.checkerboardRows = EditorGUILayout.IntSlider(new GUIContent("Rows", "Vertical resolution for checkerboard format"), (int) target.checkerboardRows, 1, 1080, new GUILayoutOption[] {});
                         }
                         else
                         {
-                            if (this.target.format3D == (mode3D) 5) // scene screens
+                            if (target.format3D == (mode3D) 5) // scene screens
                             {
-                                this.target.useStereoShader = false;
-                                //this.target.sceneScreenL = EditorGUILayout.ObjectField(new GUIContent("Scene Screen L", " "), this.target.sceneScreenL, typeof(RenderTexture), allowSceneObjects, new GUILayoutOption[] {});
-                                //this.target.sceneScreenR = EditorGUILayout.ObjectField(new GUIContent("Scene Screen R", " "), this.target.sceneScreenR, typeof(RenderTexture), allowSceneObjects, new GUILayoutOption[] {});
+                                target.useStereoShader = false;
+                                //target.sceneScreenL = EditorGUILayout.ObjectField(new GUIContent("Scene Screen L", " "), target.sceneScreenL, typeof(RenderTexture), allowSceneObjects, new GUILayoutOption[] {});
+                                //target.sceneScreenR = EditorGUILayout.ObjectField(new GUIContent("Scene Screen R", " "), target.sceneScreenR, typeof(RenderTexture), allowSceneObjects, new GUILayoutOption[] {});
                             }
                         }
                     }
                 }
             }
-            if (this.target.useStereoShader != null)
+            if (target.useStereoShader != null)
             {
-                this.target.stereoMaterial = (Material) EditorGUILayout.ObjectField(new GUIContent("Stereo Material", "Assign stereoMat material (included)."), this.target.stereoMaterial, typeof(Material), allowSceneObjects, new GUILayoutOption[] {});
+                target.stereoMaterial = (Material) EditorGUILayout.ObjectField(new GUIContent("Stereo Material", "Assign stereoMat material (included)."), target.stereoMaterial, typeof(Material), allowSceneObjects, new GUILayoutOption[] {});
             }
-            this.target.depthPlane = (GameObject) EditorGUILayout.ObjectField(new GUIContent("Depth Plane", "Assign Depth Plane Prefab"), this.target.depthPlane, typeof(GameObject), allowSceneObjects, new GUILayoutOption[] {});
+            target.depthPlane = (GameObject) EditorGUILayout.ObjectField(new GUIContent("Depth Plane", "Assign Depth Plane Prefab"), target.depthPlane, typeof(GameObject), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUILayout.BeginHorizontal(new GUILayoutOption[] {});
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
@@ -141,7 +141,7 @@ public class s3dCameraEditor : Editor
 			}*/
         if (GUI.changed)
         {
-            EditorUtility.SetDirty(this.target);
+            EditorUtility.SetDirty(target);
         }
     }
 

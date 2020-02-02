@@ -70,8 +70,8 @@ public partial class s3dGuiCursor : MonoBehaviour
 
     public virtual void Start()
     {
-        this.findS3dCamera();
-        if (this.hidePointer)
+        findS3dCamera();
+        if (hidePointer)
         {
             Cursor.visible = false;
         }
@@ -86,7 +86,7 @@ public partial class s3dGuiCursor : MonoBehaviour
         s3dCamera[] cameras3D = ((s3dCamera[]) UnityEngine.Object.FindObjectsOfType(typeof(s3dCamera))) as s3dCamera[];
         if (cameras3D.Length == 1)
         {
-            this.camera3D = cameras3D[0];
+            camera3D = cameras3D[0];
         }
         else
         {
@@ -103,66 +103,66 @@ public partial class s3dGuiCursor : MonoBehaviour
 
     public virtual void initialize() // called from s3dGuiTexture on startup, after it's been initialized;
     {
-        this.s3dTexture = (s3dGuiTexture) this.gameObject.GetComponent(typeof(s3dGuiTexture));
-        if (this.trackMouseXYPosition || this.useTouchpad)
+        s3dTexture = (s3dGuiTexture) gameObject.GetComponent(typeof(s3dGuiTexture));
+        if (trackMouseXYPosition || useTouchpad)
         {
-            float xInset = this.s3dTexture.GetComponent<GUITexture>().pixelInset.width / -2;
-            float yInset = this.s3dTexture.GetComponent<GUITexture>().pixelInset.height / -2;
+            float xInset = s3dTexture.GetComponent<GUITexture>().pixelInset.width / -2;
+            float yInset = s3dTexture.GetComponent<GUITexture>().pixelInset.height / -2;
 
             {
                 float _25 = xInset;
-                Rect _26 = this.s3dTexture.GetComponent<GUITexture>().pixelInset;
+                Rect _26 = s3dTexture.GetComponent<GUITexture>().pixelInset;
                 _26.x = _25;
-                this.s3dTexture.GetComponent<GUITexture>().pixelInset = _26;
+                s3dTexture.GetComponent<GUITexture>().pixelInset = _26;
             }
 
             {
                 float _27 = yInset;
-                Rect _28 = this.s3dTexture.GetComponent<GUITexture>().pixelInset;
+                Rect _28 = s3dTexture.GetComponent<GUITexture>().pixelInset;
                 _28.y = _27;
-                this.s3dTexture.GetComponent<GUITexture>().pixelInset = _28;
+                s3dTexture.GetComponent<GUITexture>().pixelInset = _28;
             }
 
             {
                 float _29 = xInset;
-                Rect _30 = this.s3dTexture.objectCopyR.GetComponent<GUITexture>().pixelInset;
+                Rect _30 = s3dTexture.objectCopyR.GetComponent<GUITexture>().pixelInset;
                 _30.x = _29;
-                this.s3dTexture.objectCopyR.GetComponent<GUITexture>().pixelInset = _30;
+                s3dTexture.objectCopyR.GetComponent<GUITexture>().pixelInset = _30;
             }
 
             {
                 float _31 = yInset;
-                Rect _32 = this.s3dTexture.objectCopyR.GetComponent<GUITexture>().pixelInset;
+                Rect _32 = s3dTexture.objectCopyR.GetComponent<GUITexture>().pixelInset;
                 _32.y = _31;
-                this.s3dTexture.objectCopyR.GetComponent<GUITexture>().pixelInset = _32;
+                s3dTexture.objectCopyR.GetComponent<GUITexture>().pixelInset = _32;
             }
         }
-        if (this.defaultTexture)
+        if (defaultTexture)
         {
-            this.setTexture(this.defaultTexture);
+            setTexture(defaultTexture);
         }
-        this.interactiveLayerMask = (LayerMask) (1 << this.interactiveLayer);
-        this.initialized = true;
+        interactiveLayerMask = (LayerMask) (1 << interactiveLayer);
+        initialized = true;
     }
 
     public virtual void Update()
     {
-        if (this.initialized)
+        if (initialized)
         {
-            if (this.s3dTexture.on)
+            if (s3dTexture.on)
             {
-                if (this.trackMouseXYPosition)
+                if (trackMouseXYPosition)
                 {
-                    if (!this.onlyWhenMouseDown || (this.onlyWhenMouseDown && Input.GetMouseButton(0)))
+                    if (!onlyWhenMouseDown || (onlyWhenMouseDown && Input.GetMouseButton(0)))
                     {
-                        this.s3dTexture.obPosition = this.matchMousePos();
+                        s3dTexture.obPosition = matchMousePos();
                     }
                 }
-                if (this.useTouchpad)
+                if (useTouchpad)
                 {
-                    this.doTouchpad();
+                    doTouchpad();
                 }
-                this.castForObjects();
+                castForObjects();
             }
         }
     }
@@ -170,7 +170,7 @@ public partial class s3dGuiCursor : MonoBehaviour
     public virtual Vector2 matchMousePos()
     {
         Vector2 mousePos = Input.mousePosition;
-        if (this.camera3D.format3D == (mode3D) 0) // side by side
+        if (camera3D.format3D == (mode3D) 0) // side by side
         {
             mousePos.x = mousePos.x / (Screen.width / 2);
         }
@@ -187,131 +187,131 @@ public partial class s3dGuiCursor : MonoBehaviour
         Vector2 dPosition = default(Vector2);
         RaycastHit hit = default(RaycastHit);
         s3dInteractor actScript = null;
-        if ((this.camera3D.format3D == (mode3D) 0) && !this.camera3D.sideBySideSqueezed)
+        if ((camera3D.format3D == (mode3D) 0) && !camera3D.sideBySideSqueezed)
         {
-            dPosition = new Vector2((this.s3dTexture.obPosition.x / 2) + 0.25f, this.s3dTexture.obPosition.y); // 0 = left, 0.5 = center, 1 = right
+            dPosition = new Vector2((s3dTexture.obPosition.x / 2) + 0.25f, s3dTexture.obPosition.y); // 0 = left, 0.5 = center, 1 = right
         }
         else
         {
-            dPosition = this.s3dTexture.obPosition;
+            dPosition = s3dTexture.obPosition;
         }
-        Ray ray = this.camera3D.GetComponent<Camera>().ViewportPointToRay(dPosition);
+        Ray ray = camera3D.GetComponent<Camera>().ViewportPointToRay(dPosition);
         if (Physics.Raycast(ray, out hit, 100f))
         {
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, new Color(0, 1, 0, 0));
             // if there's currently an activeObj, notify it of hit position
-            if (this.activeObj && this.followActiveObject)
+            if (activeObj && followActiveObject)
             {
-                actScript = (s3dInteractor) this.activeObj.GetComponent(typeof(s3dInteractor));
+                actScript = (s3dInteractor) activeObj.GetComponent(typeof(s3dInteractor));
                 if (actScript)
                 {
                     actScript.updatePosition(hit.point);
                 }
                 // if activeObj, tell any attached aimObject.js scripts to point at it
-                this.gameObject.SendMessage("PointAt", this.activeObj.transform.position, SendMessageOptions.DontRequireReceiver);
+                gameObject.SendMessage("PointAt", activeObj.transform.position, SendMessageOptions.DontRequireReceiver);
             }
             else
             {
                 // if no activeObj, tell any attached aimObject.js scripts to point at hitpoint
-                this.gameObject.SendMessage("PointAt", hit.point, SendMessageOptions.DontRequireReceiver);
+                gameObject.SendMessage("PointAt", hit.point, SendMessageOptions.DontRequireReceiver);
             }
         }
         // next, raycast against objects in interactive layer (for taps)
-        ray = this.camera3D.GetComponent<Camera>().ViewportPointToRay(dPosition);
-        if (this.trackMouseXYPosition)
+        ray = camera3D.GetComponent<Camera>().ViewportPointToRay(dPosition);
+        if (trackMouseXYPosition)
         {
-            if (Physics.Raycast(ray, out hit, this.clickDistance, (int) this.interactiveLayerMask))
+            if (Physics.Raycast(ray, out hit, clickDistance, (int) interactiveLayerMask))
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    this.processTap(hit, true, 1); // tapped on object
+                    processTap(hit, true, 1); // tapped on object
                 }
                 else
                 {
-                    this.processRollover(hit, true); // rolled over object
+                    processRollover(hit, true); // rolled over object
                 }
             }
             else
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    this.processTap(hit, false, 1); // if there's no hit, process clicks anyway to deactivate active objects
+                    processTap(hit, false, 1); // if there's no hit, process clicks anyway to deactivate active objects
                 }
                 else
                 {
-                    if (this.prevRolloverObject != null)
+                    if (prevRolloverObject != null)
                     {
-                        this.processRollover(hit, false); // lost rolled over object
+                        processRollover(hit, false); // lost rolled over object
                     }
                 }
             }
         }
-        if (this.useTouchpad && this.readyForTap)
+        if (useTouchpad && readyForTap)
         {
-            if (Physics.Raycast(ray, out hit, this.clickDistance, (int) this.interactiveLayerMask))
+            if (Physics.Raycast(ray, out hit, clickDistance, (int) interactiveLayerMask))
             {
-                if (this.touchpad.tap > 0)
+                if (touchpad.tap > 0)
                 {
-                    this.processTap(hit, true, this.touchpad.tap); // tapped on object
+                    processTap(hit, true, touchpad.tap); // tapped on object
                 }
                 else
                 {
-                    this.processRollover(hit, true); // rolled over object
+                    processRollover(hit, true); // rolled over object
                 }
             }
             else
             {
-                if (this.touchpad.tap > 0)
+                if (touchpad.tap > 0)
                 {
-                    this.processTap(hit, false, this.touchpad.tap); // if there's no hit, process clicks anyway to deactivate active objects
+                    processTap(hit, false, touchpad.tap); // if there's no hit, process clicks anyway to deactivate active objects
                 }
                 else
                 {
-                    if (this.prevRolloverObject != null)
+                    if (prevRolloverObject != null)
                     {
-                        this.processRollover(hit, false); // lost rolled over object
+                        processRollover(hit, false); // lost rolled over object
                     }
                 }
             }
-            this.touchpad.reset();
-            this.readyForTap = false;
-            this.StartCoroutine(this.pauseAfterTap());
+            touchpad.reset();
+            readyForTap = false;
+            StartCoroutine(pauseAfterTap());
         }
     }
 
     // update parallax
     public virtual void doTouchpad()
     {
-        if (this.uniformTouchpadMovement)
+        if (uniformTouchpadMovement)
         {
-            if (this.touchpad.position != Vector2.zero)
+            if (touchpad.position != Vector2.zero)
             {
-                this.s3dTexture.obPosition.x = Mathf.Clamp(this.s3dTexture.obPosition.x + ((this.touchpad.position.x - this.touchpadPrevPosition.x) * this.touchpadSpeed.x), 0.05f, 0.95f);
-                this.s3dTexture.obPosition.y = Mathf.Clamp(this.s3dTexture.obPosition.y + ((this.touchpad.position.y - this.touchpadPrevPosition.y) * this.touchpadSpeed.y), 0.05f, 0.95f);
-                this.touchpadPrevPosition = this.touchpad.position;
+                s3dTexture.obPosition.x = Mathf.Clamp(s3dTexture.obPosition.x + ((touchpad.position.x - touchpadPrevPosition.x) * touchpadSpeed.x), 0.05f, 0.95f);
+                s3dTexture.obPosition.y = Mathf.Clamp(s3dTexture.obPosition.y + ((touchpad.position.y - touchpadPrevPosition.y) * touchpadSpeed.y), 0.05f, 0.95f);
+                touchpadPrevPosition = touchpad.position;
             }
             else
             {
-                this.touchpadPrevPosition = Vector2.zero;
+                touchpadPrevPosition = Vector2.zero;
             }
         }
         else
         {
-            this.s3dTexture.obPosition.x = Mathf.Clamp(this.s3dTexture.obPosition.x + (this.touchpad.position.x * this.touchpadSpeed.x), 0.05f, 0.95f);
-            this.s3dTexture.obPosition.y = Mathf.Clamp(this.s3dTexture.obPosition.y + (this.touchpad.position.y * this.touchpadSpeed.y), 0.05f, 0.95f);
+            s3dTexture.obPosition.x = Mathf.Clamp(s3dTexture.obPosition.x + (touchpad.position.x * touchpadSpeed.x), 0.05f, 0.95f);
+            s3dTexture.obPosition.y = Mathf.Clamp(s3dTexture.obPosition.y + (touchpad.position.y * touchpadSpeed.y), 0.05f, 0.95f);
         }
     }
 
     public virtual void processTap(RaycastHit theHit, bool gotHit, int tapType)
     {
-        this.setTexture(this.clickTexture);
-        if (this.clickSound)
+        setTexture(clickTexture);
+        if (clickSound)
         {
-            this.GetComponent<AudioSource>().PlayOneShot(this.clickSound);
+            GetComponent<AudioSource>().PlayOneShot(clickSound);
         }
-        if (this.activeObj && (!gotHit || (this.activeObj != theHit.transform.gameObject))) // if there's currently an active object and there was a tap but no hit - then deactivate this object
+        if (activeObj && (!gotHit || (activeObj != theHit.transform.gameObject))) // if there's currently an active object and there was a tap but no hit - then deactivate this object
         {
-            actScript = (s3dInteractor) this.activeObj.GetComponent(typeof(s3dInteractor)); // or if there's currently an active object and there was a tap that hit another object - then deactivate this object
+            actScript = (s3dInteractor) activeObj.GetComponent(typeof(s3dInteractor)); // or if there's currently an active object and there was a tap that hit another object - then deactivate this object
             if (actScript)
             {
                 actScript.deactivateObject();
@@ -328,7 +328,7 @@ public partial class s3dGuiCursor : MonoBehaviour
                 }
             }
         }
-        this.StartCoroutine(this.unclickTexture());
+        StartCoroutine(unclickTexture());
     }
 
     public virtual void processRollover(RaycastHit theHit, bool onObject)
@@ -336,39 +336,39 @@ public partial class s3dGuiCursor : MonoBehaviour
         if (onObject)
         {
             s3dInteractor actScript = (s3dInteractor) theHit.transform.gameObject.GetComponent(typeof(s3dInteractor));
-            actScript.rolloverText(theHit, true, this.s3dTexture.obPosition);
-            this.prevRolloverObject = theHit.transform.gameObject;
+            actScript.rolloverText(theHit, true, s3dTexture.obPosition);
+            prevRolloverObject = theHit.transform.gameObject;
         }
         else
         {
-            actScript = (s3dInteractor) this.prevRolloverObject.transform.gameObject.GetComponent(typeof(s3dInteractor));
-            actScript.rolloverText(theHit, false, this.s3dTexture.obPosition);
-            this.prevRolloverObject = null;
+            actScript = (s3dInteractor) prevRolloverObject.transform.gameObject.GetComponent(typeof(s3dInteractor));
+            actScript.rolloverText(theHit, false, s3dTexture.obPosition);
+            prevRolloverObject = null;
         }
     }
 
     public virtual void setTexture(Texture tex)
     {
-        this.GetComponent<GUITexture>().texture = tex;
-        if (this.s3dTexture.objectCopyR)
+        GetComponent<GUITexture>().texture = tex;
+        if (s3dTexture.objectCopyR)
         {
-            this.s3dTexture.objectCopyR.GetComponent<GUITexture>().texture = tex;
+            s3dTexture.objectCopyR.GetComponent<GUITexture>().texture = tex;
         }
     }
 
     public virtual IEnumerator unclickTexture()
     {
         yield return new WaitForSeconds(0.2f);
-        if (!this.activeObj)
+        if (!activeObj)
         {
-            this.setTexture(this.defaultTexture);
+            setTexture(defaultTexture);
         }
         else
         {
-            this.setTexture(this.pickTexture);
-            if (this.pickSound)
+            setTexture(pickTexture);
+            if (pickSound)
             {
-                this.GetComponent<AudioSource>().PlayOneShot(this.pickSound);
+                GetComponent<AudioSource>().PlayOneShot(pickSound);
             }
         }
     }
@@ -376,18 +376,18 @@ public partial class s3dGuiCursor : MonoBehaviour
     public virtual IEnumerator pauseAfterTap()
     {
         yield return new WaitForSeconds(0.25f);
-        this.readyForTap = true;
+        readyForTap = true;
     }
 
     public s3dGuiCursor()
     {
-        this.interactiveLayer = 23;
-        this.clickDistance = 20;
-        this.touchpadSpeed = new Vector2(1f, 1f);
-        this.uniformTouchpadMovement = true;
-        this.touchpadPrevPosition = new Vector2(0, 0);
-        this.readyForTap = true;
-        this.followActiveObject = true;
+        interactiveLayer = 23;
+        clickDistance = 20;
+        touchpadSpeed = new Vector2(1f, 1f);
+        uniformTouchpadMovement = true;
+        touchpadPrevPosition = new Vector2(0, 0);
+        readyForTap = true;
+        followActiveObject = true;
     }
 
 }

@@ -63,66 +63,66 @@ public partial class s3dAutoDepth : MonoBehaviour
     private object[][] rays;
     public virtual void Start()
     {
-        this.mainCam = (Camera) this.gameObject.GetComponent(typeof(Camera)); // Main Stereo Camera Component
-        this.camScript = (s3dCamera) this.gameObject.GetComponent(typeof(s3dCamera)); // Main Stereo Script
-        this.infoScript = (s3dDepthInfo) this.gameObject.GetComponent(typeof(s3dDepthInfo)); // Main Stereo Script
+        mainCam = (Camera) gameObject.GetComponent(typeof(Camera)); // Main Stereo Camera Component
+        camScript = (s3dCamera) gameObject.GetComponent(typeof(s3dCamera)); // Main Stereo Script
+        infoScript = (s3dDepthInfo) gameObject.GetComponent(typeof(s3dDepthInfo)); // Main Stereo Script
     }
 
     public virtual void Update()
     {
-        if ((this.infoScript.nearDistance < Mathf.Infinity) && (this.infoScript.farDistance > 0))
+        if ((infoScript.nearDistance < Mathf.Infinity) && (infoScript.farDistance > 0))
         {
             // calculate image width at far distance
-            float cameraWidthFar = (Mathf.Tan(((this.mainCam.fieldOfView * this.mainCam.aspect) / 2) * Mathf.Deg2Rad) * this.infoScript.farDistance) * 2;
+            float cameraWidthFar = (Mathf.Tan(((mainCam.fieldOfView * mainCam.aspect) / 2) * Mathf.Deg2Rad) * infoScript.farDistance) * 2;
             // calculate total parallax
-            float cameraParallaxTotal = (this.parallaxPercentageOfWidth / 100) * cameraWidthFar;
-            if (this.autoInteraxial)
+            float cameraParallaxTotal = (parallaxPercentageOfWidth / 100) * cameraWidthFar;
+            if (autoInteraxial)
             {
                 // calculate interaxial
-                this.interaxial = ((cameraParallaxTotal * this.infoScript.nearDistance) / (this.infoScript.farDistance - this.infoScript.nearDistance)) * 1000; // convert from meters to millimeters
+                interaxial = ((cameraParallaxTotal * infoScript.nearDistance) / (infoScript.farDistance - infoScript.nearDistance)) * 1000; // convert from meters to millimeters
                 // clamp interaxial between minimum & maximum values
-                this.interaxial = Mathf.Clamp(this.interaxial, this.interaxialMin, this.interaxialMax);
+                interaxial = Mathf.Clamp(interaxial, interaxialMin, interaxialMax);
             }
             else
             {
-                this.interaxial = this.camScript.interaxial;
+                interaxial = camScript.interaxial;
             }
-            switch (this.convergenceMethod)
+            switch (convergenceMethod)
             {
                 case converge.percent:
                     // calculate negative parallax from percentage
-                    this.cameraParallaxNegative = (cameraParallaxTotal * this.percentageNegativeParallax) / 100;
+                    cameraParallaxNegative = (cameraParallaxTotal * percentageNegativeParallax) / 100;
                     // calculate zero parallax distance - convert from millimeters to meters
-                    this.zeroPrlxNewDistance = ((this.infoScript.nearDistance * this.cameraParallaxNegative) / (this.interaxial / 1000)) + this.infoScript.nearDistance;
+                    zeroPrlxNewDistance = ((infoScript.nearDistance * cameraParallaxNegative) / (interaxial / 1000)) + infoScript.nearDistance;
                     // clamp zero parallax distance to a minimum
-                    this.zeroPrlxNewDistance = Mathf.Max(this.zeroPrlxNewDistance, this.zeroPrlxDistanceMin);
+                    zeroPrlxNewDistance = Mathf.Max(zeroPrlxNewDistance, zeroPrlxDistanceMin);
                     // calculate positive parallax from percentage
-                    this.cameraParallaxPositive = (cameraParallaxTotal * (100 - this.percentageNegativeParallax)) / 100;
+                    cameraParallaxPositive = (cameraParallaxTotal * (100 - percentageNegativeParallax)) / 100;
                     break;
                 case converge.center:
-                    this.zeroPrlxNewDistance = this.infoScript.distanceAtCenter;
+                    zeroPrlxNewDistance = infoScript.distanceAtCenter;
                     break;
                 case converge.click:
                     if (Input.GetMouseButtonDown(0))
                     {
-                        this.zeroPrlxNewDistance = this.infoScript.distanceUnderMouse;
+                        zeroPrlxNewDistance = infoScript.distanceUnderMouse;
                     }
                     break;
                 case converge.mouse:
-                    this.zeroPrlxNewDistance = this.infoScript.distanceUnderMouse;
+                    zeroPrlxNewDistance = infoScript.distanceUnderMouse;
                     break;
                 case converge.@object:
-                    if (this.infoScript.selectedObject && (this.infoScript.objectDistance > 0))
+                    if (infoScript.selectedObject && (infoScript.objectDistance > 0))
                     {
-                        this.zeroPrlxNewDistance = this.infoScript.objectDistance;
+                        zeroPrlxNewDistance = infoScript.objectDistance;
                     }
                     else
                     {
-                        this.zeroPrlxNewDistance = this.camScript.zeroPrlxDist;
+                        zeroPrlxNewDistance = camScript.zeroPrlxDist;
                     }
                     break;
                 default:
-                    this.zeroPrlxNewDistance = this.camScript.zeroPrlxDist;
+                    zeroPrlxNewDistance = camScript.zeroPrlxDist;
                     break;
             }
         }
@@ -131,31 +131,31 @@ public partial class s3dAutoDepth : MonoBehaviour
     // update interaxial and convergence
     public virtual void FixedUpdate()
     {
-        if (this.convergenceMethod != converge.none)
+        if (convergenceMethod != converge.none)
         {
-            if (this.camScript.zeroPrlxDist > this.zeroPrlxNewDistance)
+            if (camScript.zeroPrlxDist > zeroPrlxNewDistance)
             {
-                this.camScript.zeroPrlxDist = this.camScript.zeroPrlxDist - ((this.camScript.zeroPrlxDist - this.zeroPrlxNewDistance) / (this.lagTime + 1));
+                camScript.zeroPrlxDist = camScript.zeroPrlxDist - ((camScript.zeroPrlxDist - zeroPrlxNewDistance) / (lagTime + 1));
             }
             else
             {
-                if (this.camScript.zeroPrlxDist < this.zeroPrlxNewDistance)
+                if (camScript.zeroPrlxDist < zeroPrlxNewDistance)
                 {
-                    this.camScript.zeroPrlxDist = this.camScript.zeroPrlxDist + ((this.zeroPrlxNewDistance - this.camScript.zeroPrlxDist) / (this.lagTime + 1));
+                    camScript.zeroPrlxDist = camScript.zeroPrlxDist + ((zeroPrlxNewDistance - camScript.zeroPrlxDist) / (lagTime + 1));
                 }
             }
         }
-        if (this.autoInteraxial)
+        if (autoInteraxial)
         {
-            if (this.camScript.interaxial > this.interaxial)
+            if (camScript.interaxial > interaxial)
             {
-                this.camScript.interaxial = this.camScript.interaxial - ((this.camScript.interaxial - this.interaxial) / (this.lagTime + 1));
+                camScript.interaxial = camScript.interaxial - ((camScript.interaxial - interaxial) / (lagTime + 1));
             }
             else
             {
-                if (this.camScript.interaxial < this.interaxial)
+                if (camScript.interaxial < interaxial)
                 {
-                    this.camScript.interaxial = this.camScript.interaxial + ((this.interaxial - this.camScript.interaxial) / (this.lagTime + 1));
+                    camScript.interaxial = camScript.interaxial + ((interaxial - camScript.interaxial) / (lagTime + 1));
                 }
             }
         }
@@ -190,15 +190,15 @@ object distance - screen plane distance    object distance
 */
     public s3dAutoDepth()
     {
-        this.convergenceMethod = converge.center;
-        this.autoInteraxial = true;
-        this.parallaxPercentageOfWidth = 3;
-        this.percentageNegativeParallax = 66;
-        this.zeroPrlxDistanceMin = 1f;
-        this.interaxialMin = 30;
-        this.interaxialMax = 120;
-        this.lagTime = 10;
-        this.rays = new object[][] {new object[0], new object[0]};
+        convergenceMethod = converge.center;
+        autoInteraxial = true;
+        parallaxPercentageOfWidth = 3;
+        percentageNegativeParallax = 66;
+        zeroPrlxDistanceMin = 1f;
+        interaxialMin = 30;
+        interaxialMax = 120;
+        lagTime = 10;
+        rays = new object[][] {new object[0], new object[0]};
     }
 
 }

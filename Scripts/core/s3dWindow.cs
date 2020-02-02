@@ -36,74 +36,74 @@ public partial class s3dWindow : MonoBehaviour
 
     public virtual void Start()
     {
-        this.mainCam = (Camera) this.gameObject.GetComponent(typeof(Camera));
-        this.camScript = (s3dCamera) this.gameObject.GetComponent(typeof(s3dCamera));
-        this.lCam = this.camScript.leftCam.GetComponent<Camera>();
-        this.rCam = this.camScript.rightCam.GetComponent<Camera>();
+        mainCam = (Camera) gameObject.GetComponent(typeof(Camera));
+        camScript = (s3dCamera) gameObject.GetComponent(typeof(s3dCamera));
+        lCam = camScript.leftCam.GetComponent<Camera>();
+        rCam = camScript.rightCam.GetComponent<Camera>();
         GameObject masks = new GameObject("masks");
-        this.leftMask = new GameObject("leftMask");
-        this.leftMask.transform.parent = masks.transform;
-        this.leftMask.layer = LayerMask.NameToLayer("Ignore Raycast");
-        MeshFilter filterL = (MeshFilter) this.leftMask.AddComponent(typeof(MeshFilter));
-        this.leftMask.AddComponent(typeof(MeshRenderer));
+        leftMask = new GameObject("leftMask");
+        leftMask.transform.parent = masks.transform;
+        leftMask.layer = LayerMask.NameToLayer("Ignore Raycast");
+        MeshFilter filterL = (MeshFilter) leftMask.AddComponent(typeof(MeshFilter));
+        leftMask.AddComponent(typeof(MeshRenderer));
         Mesh leftMesh = filterL.mesh;
         leftMesh.Clear();
         leftMesh.vertices = new Vector3[] {Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero};
         leftMesh.normals = new Vector3[] {Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero};
         leftMesh.triangles = new int[] {0, 2, 1, 0, 3, 2};
         leftMesh.uv = new Vector2[] {new Vector2(0, 1), new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1)};
-        this.leftMask.GetComponent<Renderer>().material = new Material(Shader.Find("Self-Illumin/Diffuse"));
-        this.leftMask.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 1);
-        this.leftMask.GetComponent<Renderer>().castShadows = false;
-        this.rightMask = new GameObject("rightMask");
-        this.rightMask.transform.parent = masks.transform;
-        this.rightMask.layer = LayerMask.NameToLayer("Ignore Raycast");
-        MeshFilter filterR = (MeshFilter) this.rightMask.AddComponent(typeof(MeshFilter));
-        this.rightMask.AddComponent(typeof(MeshRenderer));
+        leftMask.GetComponent<Renderer>().material = new Material(Shader.Find("Self-Illumin/Diffuse"));
+        leftMask.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 1);
+        leftMask.GetComponent<Renderer>().castShadows = false;
+        rightMask = new GameObject("rightMask");
+        rightMask.transform.parent = masks.transform;
+        rightMask.layer = LayerMask.NameToLayer("Ignore Raycast");
+        MeshFilter filterR = (MeshFilter) rightMask.AddComponent(typeof(MeshFilter));
+        rightMask.AddComponent(typeof(MeshRenderer));
         Mesh rightMesh = filterR.mesh;
         rightMesh.Clear();
         rightMesh.vertices = new Vector3[] {Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero};
         rightMesh.normals = new Vector3[] {Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero};
         rightMesh.triangles = new int[] {0, 2, 1, 0, 3, 2};
         rightMesh.uv = new Vector2[] {new Vector2(0, 1), new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1)};
-        this.rightMask.GetComponent<Renderer>().material = new Material(Shader.Find("Self-Illumin/Diffuse"));
-        this.rightMask.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 1);
-        this.rightMask.GetComponent<Renderer>().castShadows = false;
+        rightMask.GetComponent<Renderer>().material = new Material(Shader.Find("Self-Illumin/Diffuse"));
+        rightMask.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 1);
+        rightMask.GetComponent<Renderer>().castShadows = false;
     }
 
     public virtual void toggleVis(object a)
     {
         if (a != null)
         {
-            this.leftMask.GetComponent<Renderer>().enabled = true;
-            this.rightMask.GetComponent<Renderer>().enabled = true;
+            leftMask.GetComponent<Renderer>().enabled = true;
+            rightMask.GetComponent<Renderer>().enabled = true;
         }
         else
         {
-            this.leftMask.GetComponent<Renderer>().enabled = false;
-            this.rightMask.GetComponent<Renderer>().enabled = false;
+            leftMask.GetComponent<Renderer>().enabled = false;
+            rightMask.GetComponent<Renderer>().enabled = false;
         }
     }
 
     public virtual void Update()
     {
         RaycastHit hit = default(RaycastHit);
-        if (this.on)
+        if (on)
         {
             bool leftBool = false;
             float leftDepth = Mathf.Infinity;
             Vector3 leftCoord = Vector3.zero;
             int yy = 0;
-            while (yy < this.sideSamples)
+            while (yy < sideSamples)
             {
-                ray = this.lCam.ViewportPointToRay(new Vector3(1, yy / (this.sideSamples - 1f), 0)); // test lCam along right edge
+                ray = lCam.ViewportPointToRay(new Vector3(1, yy / (sideSamples - 1f), 0)); // test lCam along right edge
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    if (this.drawDebugRays)
+                    if (drawDebugRays)
                     {
                         Debug.DrawRay(ray.origin, ray.direction * hit.distance, new Color(0, 1, 1, 1));
                     }
-                    if (hit.distance < this.camScript.zeroPrlxDist)
+                    if (hit.distance < camScript.zeroPrlxDist)
                     {
                         leftBool = true;
                         if (hit.distance < leftDepth)
@@ -117,26 +117,26 @@ public partial class s3dWindow : MonoBehaviour
             }
             if (leftBool)
             {
-                this.cutInR = this.rCam.WorldToViewportPoint(leftCoord).x; // x coord to cut in
+                cutInR = rCam.WorldToViewportPoint(leftCoord).x; // x coord to cut in
             }
             else
             {
-                this.cutInR = 1;
+                cutInR = 1;
             }
             bool rightBool = false;
             float rightDepth = Mathf.Infinity;
             Vector3 rightCoord = Vector3.zero;
             yy = 0;
-            while (yy < this.sideSamples)
+            while (yy < sideSamples)
             {
-                ray = this.rCam.ViewportPointToRay(new Vector3(0, yy / (this.sideSamples - 1f), 0)); // test rCam along left edge
+                ray = rCam.ViewportPointToRay(new Vector3(0, yy / (sideSamples - 1f), 0)); // test rCam along left edge
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    if (this.drawDebugRays)
+                    if (drawDebugRays)
                     {
                         Debug.DrawRay(ray.origin, ray.direction * hit.distance, new Color(1, 0, 0, 1));
                     }
-                    if (hit.distance < this.camScript.zeroPrlxDist)
+                    if (hit.distance < camScript.zeroPrlxDist)
                     {
                         rightBool = true;
                         if (hit.distance < rightDepth)
@@ -150,41 +150,41 @@ public partial class s3dWindow : MonoBehaviour
             }
             if (rightBool)
             {
-                this.cutInL = this.lCam.WorldToViewportPoint(rightCoord).x;
+                cutInL = lCam.WorldToViewportPoint(rightCoord).x;
             }
             else
             {
-                this.cutInL = 0;
+                cutInL = 0;
             }
         }
     }
 
     public virtual void LateUpdate()
     {
-        if (this.on)
+        if (on)
         {
-            Mesh leftMesh = ((MeshFilter) this.leftMask.GetComponent(typeof(MeshFilter))).mesh;
+            Mesh leftMesh = ((MeshFilter) leftMask.GetComponent(typeof(MeshFilter))).mesh;
             Vector3[] vertsL = leftMesh.vertices;
-            vertsL[0] = this.lCam.ViewportToWorldPoint(new Vector3(0, 1, this.lCam.nearClipPlane)); // near upper left
-            vertsL[1] = this.lCam.ViewportToWorldPoint(new Vector3(0, 0, this.lCam.nearClipPlane)); // near lower left
-            if (this.maskLimit == maskDistance.FarFrustum)
+            vertsL[0] = lCam.ViewportToWorldPoint(new Vector3(0, 1, lCam.nearClipPlane)); // near upper left
+            vertsL[1] = lCam.ViewportToWorldPoint(new Vector3(0, 0, lCam.nearClipPlane)); // near lower left
+            if (maskLimit == maskDistance.FarFrustum)
             {
-                vertsL[2] = this.lCam.ViewportToWorldPoint(new Vector3(this.cutInL, 0, this.lCam.farClipPlane)); // far lower left
-                vertsL[3] = this.lCam.ViewportToWorldPoint(new Vector3(this.cutInL, 1, this.lCam.farClipPlane)); // far upper left
+                vertsL[2] = lCam.ViewportToWorldPoint(new Vector3(cutInL, 0, lCam.farClipPlane)); // far lower left
+                vertsL[3] = lCam.ViewportToWorldPoint(new Vector3(cutInL, 1, lCam.farClipPlane)); // far upper left
             }
             else
             {
-                if (this.maskLimit == maskDistance.ScreenPlane)
+                if (maskLimit == maskDistance.ScreenPlane)
                 {
-                    vertsL[2] = this.lCam.ViewportToWorldPoint(new Vector3(this.cutInL, 0, this.camScript.zeroPrlxDist)); // far lower left
-                    vertsL[3] = this.lCam.ViewportToWorldPoint(new Vector3(this.cutInL, 1, this.camScript.zeroPrlxDist)); // far upper left
+                    vertsL[2] = lCam.ViewportToWorldPoint(new Vector3(cutInL, 0, camScript.zeroPrlxDist)); // far lower left
+                    vertsL[3] = lCam.ViewportToWorldPoint(new Vector3(cutInL, 1, camScript.zeroPrlxDist)); // far upper left
                 }
                 else
                 {
-                    if (this.maskLimit == maskDistance.MaxDistance)
+                    if (maskLimit == maskDistance.MaxDistance)
                     {
-                        vertsL[2] = this.lCam.ViewportToWorldPoint(new Vector3(this.cutInL, 0, this.maximumDistance)); // far lower left
-                        vertsL[3] = this.lCam.ViewportToWorldPoint(new Vector3(this.cutInL, 1, this.maximumDistance)); // far upper left
+                        vertsL[2] = lCam.ViewportToWorldPoint(new Vector3(cutInL, 0, maximumDistance)); // far lower left
+                        vertsL[3] = lCam.ViewportToWorldPoint(new Vector3(cutInL, 1, maximumDistance)); // far upper left
                     }
                 }
             }
@@ -199,31 +199,31 @@ public partial class s3dWindow : MonoBehaviour
                 leftBounds.Encapsulate(vert);
             }
             leftMesh.bounds = leftBounds;
-            Mesh rightMesh = ((MeshFilter) this.rightMask.GetComponent(typeof(MeshFilter))).mesh;
+            Mesh rightMesh = ((MeshFilter) rightMask.GetComponent(typeof(MeshFilter))).mesh;
             Vector3[] vertsR = rightMesh.vertices;
-            if (this.maskLimit == maskDistance.FarFrustum)
+            if (maskLimit == maskDistance.FarFrustum)
             {
-                vertsR[0] = this.rCam.ViewportToWorldPoint(new Vector3(this.cutInR, 1, this.rCam.farClipPlane)); // far upper right
-                vertsR[1] = this.rCam.ViewportToWorldPoint(new Vector3(this.cutInR, 0, this.rCam.farClipPlane)); // far lower right
+                vertsR[0] = rCam.ViewportToWorldPoint(new Vector3(cutInR, 1, rCam.farClipPlane)); // far upper right
+                vertsR[1] = rCam.ViewportToWorldPoint(new Vector3(cutInR, 0, rCam.farClipPlane)); // far lower right
             }
             else
             {
-                if (this.maskLimit == maskDistance.ScreenPlane)
+                if (maskLimit == maskDistance.ScreenPlane)
                 {
-                    vertsR[0] = this.rCam.ViewportToWorldPoint(new Vector3(this.cutInR, 1, this.camScript.zeroPrlxDist)); // far upper right
-                    vertsR[1] = this.rCam.ViewportToWorldPoint(new Vector3(this.cutInR, 0, this.camScript.zeroPrlxDist)); // far lower right
+                    vertsR[0] = rCam.ViewportToWorldPoint(new Vector3(cutInR, 1, camScript.zeroPrlxDist)); // far upper right
+                    vertsR[1] = rCam.ViewportToWorldPoint(new Vector3(cutInR, 0, camScript.zeroPrlxDist)); // far lower right
                 }
                 else
                 {
-                    if (this.maskLimit == maskDistance.MaxDistance)
+                    if (maskLimit == maskDistance.MaxDistance)
                     {
-                        vertsR[0] = this.rCam.ViewportToWorldPoint(new Vector3(this.cutInR, 1, this.maximumDistance)); // far upper right
-                        vertsR[1] = this.rCam.ViewportToWorldPoint(new Vector3(this.cutInR, 0, this.maximumDistance)); // far lower right
+                        vertsR[0] = rCam.ViewportToWorldPoint(new Vector3(cutInR, 1, maximumDistance)); // far upper right
+                        vertsR[1] = rCam.ViewportToWorldPoint(new Vector3(cutInR, 0, maximumDistance)); // far lower right
                     }
                 }
             }
-            vertsR[2] = this.rCam.ViewportToWorldPoint(new Vector3(1, 0, this.rCam.nearClipPlane)); // near lower right
-            vertsR[3] = this.rCam.ViewportToWorldPoint(new Vector3(1, 1, this.rCam.nearClipPlane)); // near upper right
+            vertsR[2] = rCam.ViewportToWorldPoint(new Vector3(1, 0, rCam.nearClipPlane)); // near lower right
+            vertsR[3] = rCam.ViewportToWorldPoint(new Vector3(1, 1, rCam.nearClipPlane)); // near upper right
             Vector3 vecR1 = vertsR[3] - vertsR[0];
             Vector3 vecR2 = vertsR[1] - vertsR[0];
             Vector3 normR = Vector3.Cross(vecR1, vecR2);
@@ -240,12 +240,12 @@ public partial class s3dWindow : MonoBehaviour
 
     public s3dWindow()
     {
-        this.on = true;
-        this.sideSamples = 15;
-        this.maskLimit = maskDistance.ScreenPlane;
-        this.maskStrings = new string[] {"Max Distance", "Screen Plane", "Far Frustum"};
-        this.maximumDistance = 2;
-        this.drawDebugRays = true;
+        on = true;
+        sideSamples = 15;
+        maskLimit = maskDistance.ScreenPlane;
+        maskStrings = new string[] {"Max Distance", "Screen Plane", "Far Frustum"};
+        maximumDistance = 2;
+        drawDebugRays = true;
     }
 
 }

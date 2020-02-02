@@ -62,39 +62,39 @@ public partial class s3dGuiText : MonoBehaviour
     private float unitWidth;
     public virtual IEnumerator Start()//toggleVisible(false);
     {
-        this.findS3dCamera();
-        this.corners = new Vector2[4];
-        this.objectCopyR = UnityEngine.Object.Instantiate(this.gameObject, this.transform.position, this.transform.rotation);
-        UnityEngine.Object.Destroy((s3dGuiText) this.objectCopyR.GetComponent(typeof(s3dGuiText)));
-        this.objectCopyR.name = this.gameObject.name + "_R";
-        this.objectCopyR.transform.parent = this.gameObject.transform.parent;
-        this.gameObject.name = this.gameObject.name + "_L";
-        this.gameObject.layer = this.camera3D.leftOnlyLayer;
-        this.gameObject.GetComponent<GUIText>().material.color = this.TextColor;
-        this.objectCopyR.layer = this.camera3D.rightOnlyLayer;
-        this.objectCopyR.gameObject.GetComponent<GUIText>().material.color = this.TextColor;
-        if (this.shadowsOn)
+        findS3dCamera();
+        corners = new Vector2[4];
+        objectCopyR = UnityEngine.Object.Instantiate(gameObject, transform.position, transform.rotation);
+        UnityEngine.Object.Destroy((s3dGuiText) objectCopyR.GetComponent(typeof(s3dGuiText)));
+        objectCopyR.name = gameObject.name + "_R";
+        objectCopyR.transform.parent = gameObject.transform.parent;
+        gameObject.name = gameObject.name + "_L";
+        gameObject.layer = camera3D.leftOnlyLayer;
+        gameObject.GetComponent<GUIText>().material.color = TextColor;
+        objectCopyR.layer = camera3D.rightOnlyLayer;
+        objectCopyR.gameObject.GetComponent<GUIText>().material.color = TextColor;
+        if (shadowsOn)
         {
-            this.shadowL = UnityEngine.Object.Instantiate(this.objectCopyR.gameObject, this.transform.position, this.transform.rotation);
-            this.shadowL.name = this.gameObject.name + "_shadL";
-            this.shadowL.gameObject.layer = this.camera3D.leftOnlyLayer;
-            this.shadowL.GetComponent<GUIText>().material.color = this.ShadowColor;
-            this.shadowL.transform.parent = this.transform;
-            this.shadowR = UnityEngine.Object.Instantiate(this.objectCopyR.gameObject, this.transform.position, this.transform.rotation);
-            this.shadowR.name = this.gameObject.name + "_shadR";
-            this.shadowR.gameObject.layer = this.camera3D.rightOnlyLayer;
-            this.shadowR.GetComponent<GUIText>().material.color = this.ShadowColor;
-            this.shadowR.transform.parent = this.objectCopyR.transform;
+            shadowL = UnityEngine.Object.Instantiate(objectCopyR.gameObject, transform.position, transform.rotation);
+            shadowL.name = gameObject.name + "_shadL";
+            shadowL.gameObject.layer = camera3D.leftOnlyLayer;
+            shadowL.GetComponent<GUIText>().material.color = ShadowColor;
+            shadowL.transform.parent = transform;
+            shadowR = UnityEngine.Object.Instantiate(objectCopyR.gameObject, transform.position, transform.rotation);
+            shadowR.name = gameObject.name + "_shadR";
+            shadowR.gameObject.layer = camera3D.rightOnlyLayer;
+            shadowR.GetComponent<GUIText>().material.color = ShadowColor;
+            shadowR.transform.parent = objectCopyR.transform;
         }
-        this.obPosition = this.gameObject.transform.position;
-        this.setText(this.initString);
-        this.toggleVisible(this.beginVisible);
-        float horizontalFOV = (2 * Mathf.Atan(Mathf.Tan((this.camera3D.GetComponent<Camera>().fieldOfView * Mathf.Deg2Rad) / 2) * this.camera3D.GetComponent<Camera>().aspect)) * Mathf.Rad2Deg;
-        this.unitWidth = Mathf.Tan((horizontalFOV / 2) * Mathf.Deg2Rad); // need unit width to calculate cursor depth when there's a HIT
-        this.screenWidth = (this.unitWidth * this.camera3D.zeroPrlxDist) * 2;
-        if (this.timeToDisplay != 0f)
+        obPosition = gameObject.transform.position;
+        setText(initString);
+        toggleVisible(beginVisible);
+        float horizontalFOV = (2 * Mathf.Atan(Mathf.Tan((camera3D.GetComponent<Camera>().fieldOfView * Mathf.Deg2Rad) / 2) * camera3D.GetComponent<Camera>().aspect)) * Mathf.Rad2Deg;
+        unitWidth = Mathf.Tan((horizontalFOV / 2) * Mathf.Deg2Rad); // need unit width to calculate cursor depth when there's a HIT
+        screenWidth = (unitWidth * camera3D.zeroPrlxDist) * 2;
+        if (timeToDisplay != 0f)
         {
-            yield return new WaitForSeconds(this.timeToDisplay);
+            yield return new WaitForSeconds(timeToDisplay);
         }
     }
 
@@ -103,7 +103,7 @@ public partial class s3dGuiText : MonoBehaviour
         s3dCamera[] cameras3D = ((s3dCamera[]) UnityEngine.Object.FindObjectsOfType(typeof(s3dCamera))) as s3dCamera[];
         if (cameras3D.Length == 1)
         {
-            this.camera3D = cameras3D[0];
+            camera3D = cameras3D[0];
         }
         else
         {
@@ -121,34 +121,34 @@ public partial class s3dGuiText : MonoBehaviour
     public virtual void Update()
     {
         float obPrlx = 0.0f;
-        if (this.textOn)
+        if (textOn)
         {
-            if (this.trackMouseXYPosition)
+            if (trackMouseXYPosition)
             {
-                if (!this.onlyWhenMouseDown || (this.onlyWhenMouseDown && Input.GetMouseButton(0)))
+                if (!onlyWhenMouseDown || (onlyWhenMouseDown && Input.GetMouseButton(0)))
                 {
-                    this.obPosition = this.matchMousePos();
+                    obPosition = matchMousePos();
                 }
             }
-            if (this.keepCloser)
+            if (keepCloser)
             {
-                this.findDistanceUnderObject();
-                this.objectDistance = Mathf.Max(this.objectDistance, this.camera3D.GetComponent<Camera>().nearClipPlane);
+                findDistanceUnderObject();
+                objectDistance = Mathf.Max(objectDistance, camera3D.GetComponent<Camera>().nearClipPlane);
             }
-            this.setScreenParallax();
-            if (this.curScrnPrlx != this.scrnPrlx)
+            setScreenParallax();
+            if (curScrnPrlx != scrnPrlx)
             {
-                this.curScrnPrlx = this.curScrnPrlx + ((this.scrnPrlx - this.curScrnPrlx) / (this.lagTime + 1));
+                curScrnPrlx = curScrnPrlx + ((scrnPrlx - curScrnPrlx) / (lagTime + 1));
             }
-            this.gameObject.transform.position = new Vector3(this.obPosition.x + (this.curScrnPrlx / 2), this.obPosition.y, this.gameObject.transform.position.z + 1);
-            if (this.shadowsOn)
+            gameObject.transform.position = new Vector3(obPosition.x + (curScrnPrlx / 2), obPosition.y, gameObject.transform.position.z + 1);
+            if (shadowsOn)
             {
-                this.shadowL.gameObject.transform.localPosition = new Vector3(this.shadowOffset / 1100, -this.shadowOffset / 1000, 0);
+                shadowL.gameObject.transform.localPosition = new Vector3(shadowOffset / 1100, -shadowOffset / 1000, 0);
             }
-            this.objectCopyR.transform.position = new Vector3(this.obPosition.x - (this.curScrnPrlx / 2), this.obPosition.y, this.objectCopyR.gameObject.transform.position.z + 1);
-            if (this.shadowsOn)
+            objectCopyR.transform.position = new Vector3(obPosition.x - (curScrnPrlx / 2), obPosition.y, objectCopyR.gameObject.transform.position.z + 1);
+            if (shadowsOn)
             {
-                this.shadowR.gameObject.transform.localPosition = new Vector3(this.shadowOffset / 900, -this.shadowOffset / 1000, 0);
+                shadowR.gameObject.transform.localPosition = new Vector3(shadowOffset / 900, -shadowOffset / 1000, 0);
             }
         }
     }
@@ -158,62 +158,62 @@ public partial class s3dGuiText : MonoBehaviour
         Vector2 dPosition = default(Vector2);
         RaycastHit hit = default(RaycastHit);
         float nearDistance = Mathf.Infinity;
-        if ((this.camera3D.format3D == (mode3D) 0) && !this.camera3D.sideBySideSqueezed)
+        if ((camera3D.format3D == (mode3D) 0) && !camera3D.sideBySideSqueezed)
         {
-            dPosition = new Vector2((this.obPosition.x / 2) + 0.25f, this.obPosition.y); // 0 = left, 0.5 = center, 1 = right
+            dPosition = new Vector2((obPosition.x / 2) + 0.25f, obPosition.y); // 0 = left, 0.5 = center, 1 = right
         }
         else
         {
-            dPosition = this.obPosition;
+            dPosition = obPosition;
         }
-        Ray ray = this.camera3D.GetComponent<Camera>().ViewportPointToRay(dPosition);
+        Ray ray = camera3D.GetComponent<Camera>().ViewportPointToRay(dPosition);
         if (Physics.Raycast(ray, out hit, 100f))
         {
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, new Color(0, 1, 0, 1));
-            Plane camPlane = new Plane(this.camera3D.GetComponent<Camera>().transform.forward, this.camera3D.GetComponent<Camera>().transform.position);
+            Plane camPlane = new Plane(camera3D.GetComponent<Camera>().transform.forward, camera3D.GetComponent<Camera>().transform.position);
             Vector3 thePoint = ray.GetPoint(hit.distance);
             nearDistance = camPlane.GetDistanceToPoint(thePoint);
         }
         if (nearDistance < Mathf.Infinity)
         {
-            this.objectDistance = Mathf.Clamp(nearDistance, this.minimumDistance, this.maximumDistance);
+            objectDistance = Mathf.Clamp(nearDistance, minimumDistance, maximumDistance);
         }
     }
 
     public virtual void setScreenParallax()
     {
-        float obPrlx = ((this.camera3D.interaxial / 1000) * (this.camera3D.zeroPrlxDist - this.objectDistance)) / this.objectDistance;
-        if ((this.camera3D.format3D == (mode3D) 0) && !this.camera3D.sideBySideSqueezed)
+        float obPrlx = ((camera3D.interaxial / 1000) * (camera3D.zeroPrlxDist - objectDistance)) / objectDistance;
+        if ((camera3D.format3D == (mode3D) 0) && !camera3D.sideBySideSqueezed)
         {
-            this.scrnPrlx = (((obPrlx / this.screenWidth) * 2) + (this.nearPadding / 1000)) - (this.camera3D.H_I_T / (this.unitWidth * 15)); // why 15? no idea.
+            scrnPrlx = (((obPrlx / screenWidth) * 2) + (nearPadding / 1000)) - (camera3D.H_I_T / (unitWidth * 15)); // why 15? no idea.
         }
         else
         {
-            this.scrnPrlx = (((obPrlx / this.screenWidth) * 1) + (this.nearPadding / 1000)) - (this.camera3D.H_I_T / (this.unitWidth * 15));
+            scrnPrlx = (((obPrlx / screenWidth) * 1) + (nearPadding / 1000)) - (camera3D.H_I_T / (unitWidth * 15));
         }
     }
 
     public virtual void toggleVisible(bool t)
     {
-        this.textOn = t;
+        textOn = t;
     }
 
     public virtual void setText(string theText)
     {
-        this.gameObject.GetComponent<GUIText>().text = theText;
-        if (this.objectCopyR)
+        gameObject.GetComponent<GUIText>().text = theText;
+        if (objectCopyR)
         {
-            this.objectCopyR.GetComponent<GUIText>().text = theText;
+            objectCopyR.GetComponent<GUIText>().text = theText;
         }
-        if (this.shadowsOn)
+        if (shadowsOn)
         {
-            if (this.shadowL)
+            if (shadowL)
             {
-                this.shadowL.GetComponent<GUIText>().text = theText;
+                shadowL.GetComponent<GUIText>().text = theText;
             }
-            if (this.shadowR)
+            if (shadowR)
             {
-                this.shadowR.GetComponent<GUIText>().text = theText;
+                shadowR.GetComponent<GUIText>().text = theText;
             }
         }
     }
@@ -221,7 +221,7 @@ public partial class s3dGuiText : MonoBehaviour
     public virtual Vector2 matchMousePos()
     {
         Vector2 mousePos = Input.mousePosition;
-        if (this.camera3D.format3D == (mode3D) 0) // side by side
+        if (camera3D.format3D == (mode3D) 0) // side by side
         {
             mousePos.x = mousePos.x / (Screen.width / 2);
         }
@@ -236,24 +236,24 @@ public partial class s3dGuiText : MonoBehaviour
     // set position from another script (rollover text)
     public virtual void setObPosition(Vector2 obPos)
     {
-        this.obPosition.x = obPos.x;
-        this.obPosition.y = obPos.y;
+        obPosition.x = obPos.x;
+        obPosition.y = obPos.y;
     }
 
     public s3dGuiText()
     {
-        this.onlyWhenMouseDown = true;
-        this.objectDistance = 1f;
-        this.nearPadding = 1f;
-        this.minimumDistance = 1f;
-        this.maximumDistance = 3f;
-        this.beginVisible = true;
-        this.timeToDisplay = 2f;
-        this.TextColor = Color.white;
-        this.shadowsOn = true;
-        this.ShadowColor = Color.black;
-        this.shadowOffset = 5f;
-        this.rays = new object[0];
+        onlyWhenMouseDown = true;
+        objectDistance = 1f;
+        nearPadding = 1f;
+        minimumDistance = 1f;
+        maximumDistance = 3f;
+        beginVisible = true;
+        timeToDisplay = 2f;
+        TextColor = Color.white;
+        shadowsOn = true;
+        ShadowColor = Color.black;
+        shadowOffset = 5f;
+        rays = new object[0];
     }
 
 }

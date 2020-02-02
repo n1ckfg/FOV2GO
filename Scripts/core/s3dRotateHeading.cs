@@ -25,24 +25,24 @@ public partial class s3dRotateHeading : MonoBehaviour
 
     public virtual void Start()
     {
-        this.gyroScript = (s3dGyroCam) this.gameObject.GetComponentInChildren(typeof(s3dGyroCam));
+        gyroScript = (s3dGyroCam) gameObject.GetComponentInChildren(typeof(s3dGyroCam));
     }
 
     public virtual void Update()
     {
-        this.gyroScript.heading = this.gyroScript.heading + (this.touchpad.position.x * this.touchSpeed.x);
-        this.gyroScript.heading = this.gyroScript.heading % 360;
-        if (this.controlPitchInEditor)
+        gyroScript.heading = gyroScript.heading + (touchpad.position.x * touchSpeed.x);
+        gyroScript.heading = gyroScript.heading % 360;
+        if (controlPitchInEditor)
         {
-            this.gyroScript.Pitch = this.gyroScript.Pitch - (this.touchpad.position.y * this.touchSpeed.y);
-            this.gyroScript.Pitch = Mathf.Clamp(this.gyroScript.Pitch % 360, -60, 60);
+            gyroScript.Pitch = gyroScript.Pitch - (touchpad.position.y * touchSpeed.y);
+            gyroScript.Pitch = Mathf.Clamp(gyroScript.Pitch % 360, -60, 60);
         }
     }
 
     public s3dRotateHeading()
     {
-        this.touchSpeed = new Vector2(1, 1);
-        this.controlPitchInEditor = true;
+        touchSpeed = new Vector2(1, 1);
+        controlPitchInEditor = true;
     }
 
 }

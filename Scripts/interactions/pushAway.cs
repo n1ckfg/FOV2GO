@@ -21,21 +21,21 @@ public partial class pushAway : MonoBehaviour
     public int tapType;
     public virtual void NewTap(TapParams @params)
     {
-        if ((@params.tap == this.tapType) || (this.tapType == 3))
+        if ((@params.tap == tapType) || (tapType == 3))
         {
-            Vector3 vec = this.transform.position - @params.hit.point; // the direction from clickPoint to the rigidbody
+            Vector3 vec = transform.position - @params.hit.point; // the direction from clickPoint to the rigidbody
             vec = vec.normalized;
-            this.GetComponent<Rigidbody>().AddForce((vec * this.pushForce) * 100);
-            Vector3 vec2 = new Vector3(Random.Range(-this.spinForce, this.spinForce), Random.Range(-this.spinForce, this.spinForce), Random.Range(-this.spinForce, this.spinForce));
-            this.GetComponent<Rigidbody>().AddRelativeTorque(vec2 * 100);
+            GetComponent<Rigidbody>().AddForce((vec * pushForce) * 100);
+            Vector3 vec2 = new Vector3(Random.Range(-spinForce, spinForce), Random.Range(-spinForce, spinForce), Random.Range(-spinForce, spinForce));
+            GetComponent<Rigidbody>().AddRelativeTorque(vec2 * 100);
         }
     }
 
     public pushAway()
     {
-        this.pushForce = 5;
-        this.spinForce = 20;
-        this.tapType = 3;
+        pushForce = 5;
+        spinForce = 20;
+        tapType = 3;
     }
 
 }

@@ -48,143 +48,143 @@ public partial class pickUpPutDown : MonoBehaviour
     private float hitDistance;
     public virtual void Start()
     {
-        this.mainCamObj = GameObject.FindWithTag("MainCamera"); // Main Camera
-        this.cursorObj = GameObject.FindWithTag("cursor");
-        this.cursorScript = (s3dGuiCursor) this.cursorObj.GetComponent(typeof(s3dGuiCursor)); // Main Stereo Camera Script
-        this.startPos = this.transform.position;
-        this.startRot = this.transform.rotation;
-        this.GetComponent<Rigidbody>().centerOfMass = this.customCenterOfMass;
+        mainCamObj = GameObject.FindWithTag("MainCamera"); // Main Camera
+        cursorObj = GameObject.FindWithTag("cursor");
+        cursorScript = (s3dGuiCursor) cursorObj.GetComponent(typeof(s3dGuiCursor)); // Main Stereo Camera Script
+        startPos = transform.position;
+        startRot = transform.rotation;
+        GetComponent<Rigidbody>().centerOfMass = customCenterOfMass;
     }
 
     public virtual void NewTap(TapParams @params)
     {
-        if (this.readyForStateChange)
+        if (readyForStateChange)
         {
-            if (!this.activated)
+            if (!activated)
             {
-                if ((@params.tap == this.tapType) || (this.tapType == 3))
+                if ((@params.tap == tapType) || (tapType == 3))
                 {
-                    this.activated = true;
+                    activated = true;
                 }
             }
             else
             {
-                this.activated = false;
+                activated = false;
             }
             //activated = !activated;
-            this.hitDistance = @params.hit.distance;
-            this.readyForStateChange = false;
-            this.StartCoroutine(this.pauseAfterStateChange());
+            hitDistance = @params.hit.distance;
+            readyForStateChange = false;
+            StartCoroutine(pauseAfterStateChange());
         }
-        if (this.activated)
+        if (activated)
         {
-            this.clickPosition = @params.hit.point;
-            this.cursorScript.activeObj = this.gameObject; // tell cursorScript that we have an active object
-            if (!this.springJoint)
+            clickPosition = @params.hit.point;
+            cursorScript.activeObj = gameObject; // tell cursorScript that we have an active object
+            if (!springJoint)
             {
                 GameObject go = new GameObject("Rigidbody dragger");
                 Rigidbody body = ((Rigidbody) go.AddComponent(typeof(Rigidbody))) as Rigidbody;
-                this.springJoint = (SpringJoint) go.AddComponent(typeof(SpringJoint));
+                springJoint = (SpringJoint) go.AddComponent(typeof(SpringJoint));
                 body.isKinematic = true;
             }
-            this.springJoint.transform.position = @params.hit.point;
-            if (this.attachToCenterOfMass)
+            springJoint.transform.position = @params.hit.point;
+            if (attachToCenterOfMass)
             {
-                Vector3 anchor = this.transform.TransformDirection(this.GetComponent<Rigidbody>().centerOfMass) + this.GetComponent<Rigidbody>().transform.position;
-                anchor = this.springJoint.transform.InverseTransformPoint(anchor);
-                this.springJoint.anchor = anchor;
+                Vector3 anchor = transform.TransformDirection(GetComponent<Rigidbody>().centerOfMass) + GetComponent<Rigidbody>().transform.position;
+                anchor = springJoint.transform.InverseTransformPoint(anchor);
+                springJoint.anchor = anchor;
             }
             else
             {
-                this.springJoint.anchor = Vector3.zero;
+                springJoint.anchor = Vector3.zero;
             }
-            this.springJoint.spring = this.spring;
-            this.springJoint.damper = this.damper;
-            this.springJoint.maxDistance = this.distance;
-            this.springJoint.connectedBody = this.GetComponent<Rigidbody>();
-            this.StartCoroutine(this.increaseSpringAfterPickup());
-            this.StartCoroutine("DragObject");
+            springJoint.spring = spring;
+            springJoint.damper = damper;
+            springJoint.maxDistance = distance;
+            springJoint.connectedBody = GetComponent<Rigidbody>();
+            StartCoroutine(increaseSpringAfterPickup());
+            StartCoroutine("DragObject");
         }
         else
         {
-            this.cursorScript.activeObj = null;
+            cursorScript.activeObj = null;
         }
     }
 
     public virtual IEnumerator DragObject()
     {
-        float oldDrag = this.springJoint.connectedBody.drag;
-        float oldAngularDrag = this.springJoint.connectedBody.angularDrag;
-        this.springJoint.connectedBody.drag = this.drag;
-        this.springJoint.connectedBody.angularDrag = this.angularDrag;
-        while (this.activated) // end when receive another double-click touch
+        float oldDrag = springJoint.connectedBody.drag;
+        float oldAngularDrag = springJoint.connectedBody.angularDrag;
+        springJoint.connectedBody.drag = drag;
+        springJoint.connectedBody.angularDrag = angularDrag;
+        while (activated) // end when receive another double-click touch
         {
-            this.springJoint.transform.position = this.newPosition + this.grabOffset;
+            springJoint.transform.position = newPosition + grabOffset;
             yield return null;
         }
-        if (this.springJoint.connectedBody)
+        if (springJoint.connectedBody)
         {
-            this.springJoint.connectedBody.drag = oldDrag;
-            this.springJoint.connectedBody.angularDrag = oldAngularDrag;
-            this.springJoint.connectedBody = null;
+            springJoint.connectedBody.drag = oldDrag;
+            springJoint.connectedBody.angularDrag = oldAngularDrag;
+            springJoint.connectedBody = null;
         }
     }
 
     public virtual void Deactivate()
     {
-        this.activated = false;
-        this.cursorScript.activeObj = null;
-        this.readyForStateChange = false;
-        this.springJoint.spring = this.springJoint.spring / 10;
-        this.StartCoroutine(this.pauseAfterStateChange());
+        activated = false;
+        cursorScript.activeObj = null;
+        readyForStateChange = false;
+        springJoint.spring = springJoint.spring / 10;
+        StartCoroutine(pauseAfterStateChange());
     }
 
     public virtual IEnumerator pauseAfterStateChange()
     {
         yield return new WaitForSeconds(0.25f);
-        this.readyForStateChange = true;
+        readyForStateChange = true;
     }
 
     public virtual IEnumerator increaseSpringAfterPickup()
     {
         yield return new WaitForSeconds(1);
-        this.springJoint.spring = this.springJoint.spring * 10;
+        springJoint.spring = springJoint.spring * 10;
     }
 
     public virtual void NewPosition(Vector3 pos)
     {
         float currentDistance = 0.0f;
-        if (this.activated)
+        if (activated)
         {
-            Vector3 viewPos = this.mainCamObj.GetComponent<Camera>().WorldToViewportPoint(pos);
-            Ray ray = this.mainCamObj.GetComponent<Camera>().ViewportPointToRay(viewPos);
-            if (this.moveTowardsObject)
+            Vector3 viewPos = mainCamObj.GetComponent<Camera>().WorldToViewportPoint(pos);
+            Ray ray = mainCamObj.GetComponent<Camera>().ViewportPointToRay(viewPos);
+            if (moveTowardsObject)
             {
-                currentDistance = Vector3.Distance(this.mainCamObj.transform.position, this.clickPosition);
-                currentDistance = Mathf.Clamp(currentDistance, this.minDist, this.maxDist);
+                currentDistance = Vector3.Distance(mainCamObj.transform.position, clickPosition);
+                currentDistance = Mathf.Clamp(currentDistance, minDist, maxDist);
             }
             else
             {
-                currentDistance = this.hitDistance;
+                currentDistance = hitDistance;
             }
-            this.newPosition = ray.GetPoint(currentDistance);
+            newPosition = ray.GetPoint(currentDistance);
         }
     }
 
     public pickUpPutDown()
     {
-        this.spring = 100f;
-        this.damper = 100f;
-        this.drag = 10f;
-        this.angularDrag = 5f;
-        this.distance = 0.1f;
-        this.tapType = 1;
-        this.customCenterOfMass = Vector3.zero;
-        this.moveTowardsObject = true;
-        this.minDist = 1;
-        this.maxDist = 10;
-        this.grabOffset = new Vector3(0, 0.5f, 0);
-        this.readyForStateChange = true;
+        spring = 100f;
+        damper = 100f;
+        drag = 10f;
+        angularDrag = 5f;
+        distance = 0.1f;
+        tapType = 1;
+        customCenterOfMass = Vector3.zero;
+        moveTowardsObject = true;
+        minDist = 1;
+        maxDist = 10;
+        grabOffset = new Vector3(0, 0.5f, 0);
+        readyForStateChange = true;
     }
 
 }

@@ -22,8 +22,8 @@ public class Boundary : object
     public Vector2 max;
     public Boundary()
     {
-        this.min = Vector2.zero;
-        this.max = Vector2.zero;
+        min = Vector2.zero;
+        max = Vector2.zero;
     }
 
 }
@@ -60,118 +60,118 @@ public partial class s3dTouchpad : MonoBehaviour
     private float fingerDownTime;
     public virtual void Start()
     {
-        this.setUp();
+        setUp();
     }
 
     public virtual void setUp()
     {
         // Cache this component at startup instead of looking up every frame	
-        this.gui = (GUITexture) this.GetComponent(typeof(GUITexture));
+        gui = (GUITexture) GetComponent(typeof(GUITexture));
         // Store the default rect for the gui, so we can snap back to it
-        this.defaultRect = this.gui.pixelInset;
-        this.defaultRect.x = this.defaultRect.x + (this.transform.position.x * Screen.width);// + gui.pixelInset.x; // -  Screen.width * 0.5;
-        this.defaultRect.y = this.defaultRect.y + (this.transform.position.y * Screen.height);// - Screen.height * 0.5;
+        defaultRect = gui.pixelInset;
+        defaultRect.x = defaultRect.x + (transform.position.x * Screen.width);// + gui.pixelInset.x; // -  Screen.width * 0.5;
+        defaultRect.y = defaultRect.y + (transform.position.y * Screen.height);// - Screen.height * 0.5;
 
         {
             float _53 = 0f;
-            Vector3 _54 = this.transform.position;
+            Vector3 _54 = transform.position;
             _54.x = _53;
-            this.transform.position = _54;
+            transform.position = _54;
         }
 
         {
             float _55 = 0f;
-            Vector3 _56 = this.transform.position;
+            Vector3 _56 = transform.position;
             _56.y = _55;
-            this.transform.position = _56;
+            transform.position = _56;
         }
         // If a texture has been assigned, then use the rect from the gui as our touchZone
-        if (this.gui.texture)
+        if (gui.texture)
         {
-            this.touchZone = this.defaultRect;
+            touchZone = defaultRect;
         }
         // This is an offset for touch input to match with the top left corner of the GUI
-        this.guiTouchOffset.x = this.defaultRect.width * 0.5f;
-        this.guiTouchOffset.y = this.defaultRect.height * 0.5f;
+        guiTouchOffset.x = defaultRect.width * 0.5f;
+        guiTouchOffset.y = defaultRect.height * 0.5f;
         // Cache the center of the GUI, since it doesn't change
-        this.guiCenter.x = this.defaultRect.x + this.guiTouchOffset.x;
-        this.guiCenter.y = this.defaultRect.y + this.guiTouchOffset.y;
+        guiCenter.x = defaultRect.x + guiTouchOffset.x;
+        guiCenter.y = defaultRect.y + guiTouchOffset.y;
         // Let's build the GUI boundary, so we can clamp joystick movement
-        this.guiBoundary.min.x = this.defaultRect.x - this.guiTouchOffset.x;
-        this.guiBoundary.max.x = this.defaultRect.x + this.guiTouchOffset.x;
-        this.guiBoundary.min.y = this.defaultRect.y - this.guiTouchOffset.y;
-        this.guiBoundary.max.y = this.defaultRect.y + this.guiTouchOffset.y;
-        this.gui.pixelInset = this.defaultRect;
+        guiBoundary.min.x = defaultRect.x - guiTouchOffset.x;
+        guiBoundary.max.x = defaultRect.x + guiTouchOffset.x;
+        guiBoundary.min.y = defaultRect.y - guiTouchOffset.y;
+        guiBoundary.max.y = defaultRect.y + guiTouchOffset.y;
+        gui.pixelInset = defaultRect;
     }
 
     public virtual void Update()
     {
-        Vector2 guiTouchPos = (Vector2) Input.mousePosition - this.guiTouchOffset;
-        if (this.touchZone.Contains(Input.mousePosition))
+        Vector2 guiTouchPos = (Vector2) Input.mousePosition - guiTouchOffset;
+        if (touchZone.Contains(Input.mousePosition))
         {
             if (Input.GetMouseButtonDown(0))
             {
-                this.thisTouchID = 1;
-                this.fingerDownPos = Input.mousePosition;
-                this.thisTouchDownTime = Time.time;
-                this.thisTouchMoved = false;
+                thisTouchID = 1;
+                fingerDownPos = Input.mousePosition;
+                thisTouchDownTime = Time.time;
+                thisTouchMoved = false;
             }
         }
-        if (this.thisTouchID == 1)
+        if (thisTouchID == 1)
         {
-            if (!this.actLikeJoystick)
+            if (!actLikeJoystick)
             {
-                this.position.x = Mathf.Clamp((Input.mousePosition.x - this.fingerDownPos.x) / (this.touchZone.width / 2), -1, 1);
-                this.position.y = Mathf.Clamp((Input.mousePosition.y - this.fingerDownPos.y) / (this.touchZone.height / 2), -1, 1);
+                position.x = Mathf.Clamp((Input.mousePosition.x - fingerDownPos.x) / (touchZone.width / 2), -1, 1);
+                position.y = Mathf.Clamp((Input.mousePosition.y - fingerDownPos.y) / (touchZone.height / 2), -1, 1);
             }
-            if (this.moveLikeJoystick)
+            if (moveLikeJoystick)
             {
 
                 {
-                    float _57 = Mathf.Clamp(guiTouchPos.x, this.guiBoundary.min.x, this.guiBoundary.max.x);
-                    Rect _58 = this.gui.pixelInset;
+                    float _57 = Mathf.Clamp(guiTouchPos.x, guiBoundary.min.x, guiBoundary.max.x);
+                    Rect _58 = gui.pixelInset;
                     _58.x = _57;
-                    this.gui.pixelInset = _58;
+                    gui.pixelInset = _58;
                 }
 
                 {
-                    float _59 = Mathf.Clamp(guiTouchPos.y, this.guiBoundary.min.y, this.guiBoundary.max.y);
-                    Rect _60 = this.gui.pixelInset;
+                    float _59 = Mathf.Clamp(guiTouchPos.y, guiBoundary.min.y, guiBoundary.max.y);
+                    Rect _60 = gui.pixelInset;
                     _60.y = _59;
-                    this.gui.pixelInset = _60;
+                    gui.pixelInset = _60;
                 }
             }
-            if (this.actLikeJoystick)
+            if (actLikeJoystick)
             {
-                float dummyInsetX = Mathf.Clamp(guiTouchPos.x, this.guiBoundary.min.x, this.guiBoundary.max.x);
-                float dummyInsetY = Mathf.Clamp(guiTouchPos.y, this.guiBoundary.min.y, this.guiBoundary.max.y);
-                this.position.x = ((dummyInsetX + this.guiTouchOffset.x) - this.guiCenter.x) / this.guiTouchOffset.x;
-                this.position.y = ((dummyInsetY + this.guiTouchOffset.y) - this.guiCenter.y) / this.guiTouchOffset.y;
+                float dummyInsetX = Mathf.Clamp(guiTouchPos.x, guiBoundary.min.x, guiBoundary.max.x);
+                float dummyInsetY = Mathf.Clamp(guiTouchPos.y, guiBoundary.min.y, guiBoundary.max.y);
+                position.x = ((dummyInsetX + guiTouchOffset.x) - guiCenter.x) / guiTouchOffset.x;
+                position.y = ((dummyInsetY + guiTouchOffset.y) - guiCenter.y) / guiTouchOffset.y;
             }
         }
-        if (Input.GetMouseButtonUp(0) && (this.thisTouchID == 1))
+        if (Input.GetMouseButtonUp(0) && (thisTouchID == 1))
         {
-            this.fingerUpPos = Input.mousePosition;
-            float dist = Vector2.Distance(this.fingerDownPos, this.fingerUpPos);
-            if (dist < this.tapDistanceLimit)
+            fingerUpPos = Input.mousePosition;
+            float dist = Vector2.Distance(fingerDownPos, fingerUpPos);
+            if (dist < tapDistanceLimit)
             {
-                if (Time.time < (this.thisTouchDownTime + this.shortTapTimeMax))
+                if (Time.time < (thisTouchDownTime + shortTapTimeMax))
                 {
-                    this.tap = 1;
+                    tap = 1;
                 }
                 else
                 {
-                    if (Time.time < (this.thisTouchDownTime + this.longTapTimeMax))
+                    if (Time.time < (thisTouchDownTime + longTapTimeMax))
                     {
-                        this.tap = 2;
+                        tap = 2;
                     }
                 }
             }
-            this.thisTouchID = -1;
-            this.position = Vector2.zero;
-            if (this.moveLikeJoystick)
+            thisTouchID = -1;
+            position = Vector2.zero;
+            if (moveLikeJoystick)
             {
-                this.gui.pixelInset = this.defaultRect;
+                gui.pixelInset = defaultRect;
             }
         }
     }
@@ -179,17 +179,17 @@ public partial class s3dTouchpad : MonoBehaviour
     /* The client that directly registers the tap is responsible for resetting touchpad. Currently, the following scripts call this function: s3dDeviceManager.js, s3dFirstPersonController.js, s3dGuiTexture.js, triggerObjectButton.js, triggerSceneChange.js. Note that since s3dInteractor.js (called by s3dGuiTexture.js) & all interaction scripts (called by s3dInteractor.js) are not direct clients, they aren't responsible for resetting touchpad */
     public virtual void reset()
     {
-        this.tap = 0;
+        tap = 0;
     }
 
     public s3dTouchpad()
     {
-        this.moveLikeJoystick = true;
-        this.shortTapTimeMax = 0.2f;
-        this.longTapTimeMax = 0.5f;
-        this.tapDistanceLimit = 10f;
-        this.guiBoundary = new Boundary();
-        this.thisTouchID = -1;
+        moveLikeJoystick = true;
+        shortTapTimeMax = 0.2f;
+        longTapTimeMax = 0.5f;
+        tapDistanceLimit = 10f;
+        guiBoundary = new Boundary();
+        thisTouchID = -1;
     }
 
 }

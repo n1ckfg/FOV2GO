@@ -33,33 +33,33 @@ public partial class s3dStereoParameters : MonoBehaviour
     private float hitInc;
     public virtual void Awake()
     {
-        this.s3dDeviceMan = (s3dDeviceManager) this.gameObject.GetComponent(typeof(s3dDeviceManager));
+        s3dDeviceMan = (s3dDeviceManager) gameObject.GetComponent(typeof(s3dDeviceManager));
         // if object has s3dDeviceManager.js, use that script's camera & touchpads
-        if (this.s3dDeviceMan)
+        if (s3dDeviceMan)
         {
-            this.stereoParamsTouchpad = this.s3dDeviceMan.stereoParamsTouchpad;
-            this.interaxialTouchpad = this.s3dDeviceMan.interaxialTouchpad;
-            this.zeroPrlxTouchpad = this.s3dDeviceMan.zeroPrlxTouchpad;
-            this.hitTouchpad = this.s3dDeviceMan.hitTouchpad;
+            stereoParamsTouchpad = s3dDeviceMan.stereoParamsTouchpad;
+            interaxialTouchpad = s3dDeviceMan.interaxialTouchpad;
+            zeroPrlxTouchpad = s3dDeviceMan.zeroPrlxTouchpad;
+            hitTouchpad = s3dDeviceMan.hitTouchpad;
         }
     }
 
     public virtual void Start()
     {
-        this.findS3dCamera();
-        if (this.saveStereoParamsToDisk)
+        findS3dCamera();
+        if (saveStereoParamsToDisk)
         {
             if (PlayerPrefs.GetFloat(Application.loadedLevelName + "_interaxial") != 0f)
             {
-                this.camera3D.interaxial = PlayerPrefs.GetFloat(Application.loadedLevelName + "_interaxial");
+                camera3D.interaxial = PlayerPrefs.GetFloat(Application.loadedLevelName + "_interaxial");
             }
             if (PlayerPrefs.GetFloat(Application.loadedLevelName + "_zeroPrlxDistance") != 0f)
             {
-                this.camera3D.zeroPrlxDist = PlayerPrefs.GetFloat(Application.loadedLevelName + "_zeroPrlxDist");
+                camera3D.zeroPrlxDist = PlayerPrefs.GetFloat(Application.loadedLevelName + "_zeroPrlxDist");
             }
             if (PlayerPrefs.GetFloat(Application.loadedLevelName + "_H_I_T") != 0f)
             {
-                this.camera3D.H_I_T = PlayerPrefs.GetFloat(Application.loadedLevelName + "_H_I_T");
+                camera3D.H_I_T = PlayerPrefs.GetFloat(Application.loadedLevelName + "_H_I_T");
             }
         }
     }
@@ -69,7 +69,7 @@ public partial class s3dStereoParameters : MonoBehaviour
         s3dCamera[] cameras3D = ((s3dCamera[]) UnityEngine.Object.FindObjectsOfType(typeof(s3dCamera))) as s3dCamera[];
         if (cameras3D.Length == 1)
         {
-            this.camera3D = cameras3D[0];
+            camera3D = cameras3D[0];
         }
         else
         {
@@ -86,68 +86,68 @@ public partial class s3dStereoParameters : MonoBehaviour
 
     public virtual void Update()
     {
-        if (this.stereoParamsTouchpad && (this.stereoParamsTouchpad.tap > 0))
+        if (stereoParamsTouchpad && (stereoParamsTouchpad.tap > 0))
         {
-            this.showParamGui = !this.showParamGui;
-            this.toggleStereoParamGui(this.showParamGui);
-            this.stereoParamsTouchpad.reset();
-            if (this.showParamGui)
+            showParamGui = !showParamGui;
+            toggleStereoParamGui(showParamGui);
+            stereoParamsTouchpad.reset();
+            if (showParamGui)
             {
-                this.interaxialStart = this.camera3D.interaxial;
-                this.zeroPrlxStart = this.camera3D.zeroPrlxDist;
-                this.hitStart = this.camera3D.H_I_T;
+                interaxialStart = camera3D.interaxial;
+                zeroPrlxStart = camera3D.zeroPrlxDist;
+                hitStart = camera3D.H_I_T;
             }
             else
             {
                  // showParamGui has just been dismissed, write new values to disk
-                if (this.saveStereoParamsToDisk)
+                if (saveStereoParamsToDisk)
                 {
-                    PlayerPrefs.SetFloat(Application.loadedLevelName + "_interaxial", this.camera3D.interaxial);
-                    PlayerPrefs.SetFloat(Application.loadedLevelName + "_zeroPrlxDist", this.camera3D.zeroPrlxDist);
-                    PlayerPrefs.SetFloat(Application.loadedLevelName + "_H_I_T", this.camera3D.H_I_T);
+                    PlayerPrefs.SetFloat(Application.loadedLevelName + "_interaxial", camera3D.interaxial);
+                    PlayerPrefs.SetFloat(Application.loadedLevelName + "_zeroPrlxDist", camera3D.zeroPrlxDist);
+                    PlayerPrefs.SetFloat(Application.loadedLevelName + "_H_I_T", camera3D.H_I_T);
                 }
-                this.interaxialStart = this.camera3D.interaxial;
-                this.zeroPrlxStart = this.camera3D.zeroPrlxDist;
-                this.hitStart = this.camera3D.H_I_T;
+                interaxialStart = camera3D.interaxial;
+                zeroPrlxStart = camera3D.zeroPrlxDist;
+                hitStart = camera3D.H_I_T;
             }
         }
-        if (this.showParamGui)
+        if (showParamGui)
         {
             // touchpad should be set to moveLikeJoystick = false, actLikeJoystick = true
             // so that a tapdown generates a position change
             // grab position while touchpad is being dragged - because when we actually get the tap (at TouchPhase.Ended) 
             // or the click (on Input.GetMouseButtonUp), position has already been reset to 0
-            if (this.interaxialTouchpad.position.x != 0f)
+            if (interaxialTouchpad.position.x != 0f)
             {
                 // position values are between -1.0 and 1.0 - values < 1.0 are converted to -1.0, values > 1.0 are converted to 1.0
-                this.interaxialInc = Mathf.Round(this.interaxialTouchpad.position.x + (0.49f * Mathf.Sign(this.interaxialTouchpad.position.x)));
+                interaxialInc = Mathf.Round(interaxialTouchpad.position.x + (0.49f * Mathf.Sign(interaxialTouchpad.position.x)));
             }
-            if (this.interaxialTouchpad.tap > 0)
+            if (interaxialTouchpad.tap > 0)
             {
-                this.camera3D.interaxial = this.camera3D.interaxial + this.interaxialInc;
-                this.camera3D.interaxial = Mathf.Max(this.camera3D.interaxial, 0);
-                this.interaxialTouchpad.reset();
+                camera3D.interaxial = camera3D.interaxial + interaxialInc;
+                camera3D.interaxial = Mathf.Max(camera3D.interaxial, 0);
+                interaxialTouchpad.reset();
             }
-            if (this.zeroPrlxTouchpad.position.x != 0f)
+            if (zeroPrlxTouchpad.position.x != 0f)
             {
-                this.zeroPrlxInc = Mathf.Round(this.zeroPrlxTouchpad.position.x + (0.49f * Mathf.Sign(this.zeroPrlxTouchpad.position.x))) * 0.25f;
+                zeroPrlxInc = Mathf.Round(zeroPrlxTouchpad.position.x + (0.49f * Mathf.Sign(zeroPrlxTouchpad.position.x))) * 0.25f;
             }
-            if (this.zeroPrlxTouchpad.tap > 0)
+            if (zeroPrlxTouchpad.tap > 0)
             {
-                this.camera3D.zeroPrlxDist = this.camera3D.zeroPrlxDist + this.zeroPrlxInc;
-                this.camera3D.zeroPrlxDist = Mathf.Max(this.camera3D.zeroPrlxDist, 1f);
-                this.zeroPrlxTouchpad.reset();
+                camera3D.zeroPrlxDist = camera3D.zeroPrlxDist + zeroPrlxInc;
+                camera3D.zeroPrlxDist = Mathf.Max(camera3D.zeroPrlxDist, 1f);
+                zeroPrlxTouchpad.reset();
             }
-            if (this.hitTouchpad.position.x != 0f)
+            if (hitTouchpad.position.x != 0f)
             {
-                this.hitInc = Mathf.Round(this.hitTouchpad.position.x + (0.49f * Mathf.Sign(this.hitTouchpad.position.x))) * 0.1f;
+                hitInc = Mathf.Round(hitTouchpad.position.x + (0.49f * Mathf.Sign(hitTouchpad.position.x))) * 0.1f;
             }
-            if (this.hitTouchpad.tap > 0)
+            if (hitTouchpad.tap > 0)
             {
-                this.camera3D.H_I_T = this.camera3D.H_I_T + this.hitInc;
-                this.hitTouchpad.reset();
+                camera3D.H_I_T = camera3D.H_I_T + hitInc;
+                hitTouchpad.reset();
             }
-            this.stereoReadoutText.setText((((("Interaxial: " + (Mathf.Round(this.camera3D.interaxial * 10) / 10)) + "mm \nZero Prlx: ") + (Mathf.Round(this.camera3D.zeroPrlxDist * 10) / 10)) + "M \nH.I.T.: ") + (Mathf.Round(this.camera3D.H_I_T * 10) / 10));
+            stereoReadoutText.setText((((("Interaxial: " + (Mathf.Round(camera3D.interaxial * 10) / 10)) + "mm \nZero Prlx: ") + (Mathf.Round(camera3D.zeroPrlxDist * 10) / 10)) + "M \nH.I.T.: ") + (Mathf.Round(camera3D.H_I_T * 10) / 10));
         }
     }
 
@@ -155,13 +155,13 @@ public partial class s3dStereoParameters : MonoBehaviour
     {
         if (on)
         {
-            ((GUITexture) this.stereoParamsTouchpad.gameObject.GetComponent(typeof(GUITexture))).texture = this.dismissStereoParamsTexture;
-            this.stereoReadoutText.toggleVisible(true);
+            ((GUITexture) stereoParamsTouchpad.gameObject.GetComponent(typeof(GUITexture))).texture = dismissStereoParamsTexture;
+            stereoReadoutText.toggleVisible(true);
         }
         else
         {
-            ((GUITexture) this.stereoParamsTouchpad.gameObject.GetComponent(typeof(GUITexture))).texture = this.showStereoParamsTexture;
-            this.stereoReadoutText.toggleVisible(false);
+            ((GUITexture) stereoParamsTouchpad.gameObject.GetComponent(typeof(GUITexture))).texture = showStereoParamsTexture;
+            stereoReadoutText.toggleVisible(false);
         }
     }
 

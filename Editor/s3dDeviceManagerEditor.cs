@@ -18,76 +18,76 @@ public class s3dDeviceManagerEditor : Editor
     public override void OnInspectorGUI()
     {
         EditorGUIUtility.LookLikeControls(170, 30);
-        bool allowSceneObjects = !EditorUtility.IsPersistent(this.target);
+        bool allowSceneObjects = !EditorUtility.IsPersistent(target);
         EditorGUILayout.BeginVertical("box", new GUILayoutOption[] {});
-        this.target.phoneLayout = (phoneType) EditorGUILayout.EnumPopup(new GUIContent("Phone Layout", "Select Phone Layout"), this.target.phoneLayout, new GUILayoutOption[] {});
+        target.phoneLayout = (phoneType) EditorGUILayout.EnumPopup(new GUIContent("Phone Layout", "Select Phone Layout"), target.phoneLayout, new GUILayoutOption[] {});
         EditorGUILayout.BeginHorizontal(new GUILayoutOption[] {});
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
-        this.target.use3dCursor = EditorGUILayout.Toggle(new GUIContent("Use 3D Cursor", "Use 3D Cursor"), this.target.use3dCursor, new GUILayoutOption[] {});
-        if (this.target.use3dCursor != null)
+        target.use3dCursor = EditorGUILayout.Toggle(new GUIContent("Use 3D Cursor", "Use 3D Cursor"), target.use3dCursor, new GUILayoutOption[] {});
+        if (target.use3dCursor != null)
         {
             EditorGUI.indentLevel = 1;
-            this.target.cursor3D = (s3dGuiCursor) EditorGUILayout.ObjectField(new GUIContent("3D Cursor", "Select s3dGuiTexture for Cursor"), this.target.cursor3D, typeof(s3dGuiCursor), allowSceneObjects, new GUILayoutOption[] {});
+            target.cursor3D = (s3dGuiCursor) EditorGUILayout.ObjectField(new GUIContent("3D Cursor", "Select s3dGuiTexture for Cursor"), target.cursor3D, typeof(s3dGuiCursor), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
-        this.target.movePadPosition = (controlPos) EditorGUILayout.EnumPopup(new GUIContent("Move Pad Position", "Select Move Pad Position"), this.target.movePadPosition, new GUILayoutOption[] {});
-        if (!(this.target.movePadPosition == 0))
+        target.movePadPosition = (controlPos) EditorGUILayout.EnumPopup(new GUIContent("Move Pad Position", "Select Move Pad Position"), target.movePadPosition, new GUILayoutOption[] {});
+        if (!(target.movePadPosition == 0))
         {
             EditorGUI.indentLevel = 1;
-            this.target.moveTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Move Touchpad", "Select s3dTouchpad for Move"), this.target.moveTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.moveTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Move Touchpad", "Select s3dTouchpad for Move"), target.moveTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
-        this.target.turnPadPosition = (controlPos) EditorGUILayout.EnumPopup(new GUIContent("Turn Pad Position", "Select Turn Pad Position"), this.target.turnPadPosition, new GUILayoutOption[] {});
-        if (!(this.target.turnPadPosition == 0))
+        target.turnPadPosition = (controlPos) EditorGUILayout.EnumPopup(new GUIContent("Turn Pad Position", "Select Turn Pad Position"), target.turnPadPosition, new GUILayoutOption[] {});
+        if (!(target.turnPadPosition == 0))
         {
             EditorGUI.indentLevel = 1;
-            this.target.turnTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Turn Touchpad", "Select s3dTouchpad for Turn"), this.target.turnTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.turnTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Turn Touchpad", "Select s3dTouchpad for Turn"), target.turnTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
-        this.target.pointPadPosition = (controlPos) EditorGUILayout.EnumPopup(new GUIContent("Cursor Pad Position", "Select Cursor Pad Position"), this.target.pointPadPosition, new GUILayoutOption[] {});
-        if (!(this.target.pointPadPosition == 0))
+        target.pointPadPosition = (controlPos) EditorGUILayout.EnumPopup(new GUIContent("Cursor Pad Position", "Select Cursor Pad Position"), target.pointPadPosition, new GUILayoutOption[] {});
+        if (!(target.pointPadPosition == 0))
         {
             EditorGUI.indentLevel = 1;
-            this.target.pointTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Cursor Touchpad", "Select s3dTouchpad for Cursor"), this.target.pointTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.pointTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Cursor Touchpad", "Select s3dTouchpad for Cursor"), target.pointTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
-        this.target.useStereoParamsTouchpad = EditorGUILayout.Toggle(new GUIContent("Show 3D Params Touchpad", "Use Stereo Params Touchpad"), this.target.useStereoParamsTouchpad, new GUILayoutOption[] {});
-        if (this.target.useStereoParamsTouchpad != null)
+        target.useStereoParamsTouchpad = EditorGUILayout.Toggle(new GUIContent("Show 3D Params Touchpad", "Use Stereo Params Touchpad"), target.useStereoParamsTouchpad, new GUILayoutOption[] {});
+        if (target.useStereoParamsTouchpad != null)
         {
             EditorGUI.indentLevel = 1;
-            this.target.stereoParamsTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Stereo Params Touchpad", "Select s3dTouchpad for Stereo Params"), this.target.stereoParamsTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.stereoParamsTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Stereo Params Touchpad", "Select s3dTouchpad for Stereo Params"), target.stereoParamsTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 2;
-            this.target.interaxialTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Interaxial Touchpad", "Select s3dTouchpad for Interaxial"), this.target.interaxialTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
-            this.target.zeroPrlxTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Zero Prlx Touchpad", "Select s3dTouchpad for Zero Prlx"), this.target.zeroPrlxTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
-            this.target.hitTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("H I T Touchpad", "Select s3dTouchpad for H I T"), this.target.hitTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.interaxialTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Interaxial Touchpad", "Select s3dTouchpad for Interaxial"), target.interaxialTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.zeroPrlxTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Zero Prlx Touchpad", "Select s3dTouchpad for Zero Prlx"), target.zeroPrlxTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.hitTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("H I T Touchpad", "Select s3dTouchpad for H I T"), target.hitTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
-        this.target.showLoadNewScenePad = EditorGUILayout.Toggle(new GUIContent("Show Load Scene Touchpad", "Show Load New Scene Touchpad"), this.target.showLoadNewScenePad, new GUILayoutOption[] {});
-        if (this.target.showLoadNewScenePad != null)
+        target.showLoadNewScenePad = EditorGUILayout.Toggle(new GUIContent("Show Load Scene Touchpad", "Show Load New Scene Touchpad"), target.showLoadNewScenePad, new GUILayoutOption[] {});
+        if (target.showLoadNewScenePad != null)
         {
             EditorGUI.indentLevel = 1;
-            this.target.loadNewSceneTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Load New Scene Touchpad", "Select s3dTouchpad for Load New Scene"), this.target.loadNewSceneTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.loadNewSceneTouchpad = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("Load New Scene Touchpad", "Select s3dTouchpad for Load New Scene"), target.loadNewSceneTouchpad, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
-        this.target.showFpsTool01 = EditorGUILayout.Toggle(new GUIContent("Show FPS Tool 01 Touchpad", "Show FPS Tool 01 Touchpad"), this.target.showFpsTool01, new GUILayoutOption[] {});
-        if (this.target.showFpsTool01 != null)
+        target.showFpsTool01 = EditorGUILayout.Toggle(new GUIContent("Show FPS Tool 01 Touchpad", "Show FPS Tool 01 Touchpad"), target.showFpsTool01, new GUILayoutOption[] {});
+        if (target.showFpsTool01 != null)
         {
             EditorGUI.indentLevel = 1;
-            this.target.fpsTool01 = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("FPS Tool 01 Touchpad", "Select s3dTouchpad for FPS Tool 01"), this.target.fpsTool01, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.fpsTool01 = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("FPS Tool 01 Touchpad", "Select s3dTouchpad for FPS Tool 01"), target.fpsTool01, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
-        this.target.showFpsTool02 = EditorGUILayout.Toggle(new GUIContent("Show FPS Tool 02 Touchpad", "Show FPS Tool 02 Touchpad"), this.target.showFpsTool02, new GUILayoutOption[] {});
-        if (this.target.showFpsTool02 != null)
+        target.showFpsTool02 = EditorGUILayout.Toggle(new GUIContent("Show FPS Tool 02 Touchpad", "Show FPS Tool 02 Touchpad"), target.showFpsTool02, new GUILayoutOption[] {});
+        if (target.showFpsTool02 != null)
         {
             EditorGUI.indentLevel = 1;
-            this.target.fpsTool02 = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("FPS Tool 02 Touchpad", "Select s3dTouchpad for FPS Tool 02"), this.target.fpsTool02, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
+            target.fpsTool02 = (s3dTouchpad) EditorGUILayout.ObjectField(new GUIContent("FPS Tool 02 Touchpad", "Select s3dTouchpad for FPS Tool 02"), target.fpsTool02, typeof(s3dTouchpad), allowSceneObjects, new GUILayoutOption[] {});
             EditorGUI.indentLevel = 0;
         }
         EditorGUILayout.EndVertical();
         if (GUI.changed)
         {
-            EditorUtility.SetDirty(this.target);
+            EditorUtility.SetDirty(target);
         }
     }
 

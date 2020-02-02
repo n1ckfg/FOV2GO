@@ -19,21 +19,21 @@ public partial class rolloverText : MonoBehaviour
     public string message;
     public virtual void ShowText(Vector2 obPosition)
     {
-        Vector2 textPos = obPosition + this.offset;
-        this.theText.setObPosition(textPos);
-        this.theText.setText(this.message);
-        this.theText.toggleVisible(true);
+        Vector2 textPos = obPosition + offset;
+        theText.setObPosition(textPos);
+        theText.setText(message);
+        theText.toggleVisible(true);
     }
 
     public virtual void HideText(Vector2 obPosition)
     {
-        this.theText.toggleVisible(false);
+        theText.toggleVisible(false);
     }
 
     public rolloverText()
     {
-        this.offset = new Vector2(0, 0.15f);
-        this.message = "rollover message";
+        offset = new Vector2(0, 0.15f);
+        message = "rollover message";
     }
 
 }

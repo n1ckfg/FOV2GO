@@ -39,96 +39,96 @@ public partial class s3dSmoothMouseLook : MonoBehaviour
     public virtual void Update()
     {
         float tempFloat = 0.0f;
-        if (this.Axis == Axes.MouseXandY)
+        if (Axis == Axes.MouseXandY)
         {
-            this.rotAverageY = 0;
-            this.rotAverageX = 0;
-            if (Input.GetMouseButton(0) || !this.MouseDownRequired)
+            rotAverageY = 0;
+            rotAverageX = 0;
+            if (Input.GetMouseButton(0) || !MouseDownRequired)
             {
-                this.rotationX = this.rotationX + (Input.GetAxis("Mouse X") * this.sensitivityX);
-                this.rotationY = this.rotationY + (Input.GetAxis("Mouse Y") * this.sensitivityY);
+                rotationX = rotationX + (Input.GetAxis("Mouse X") * sensitivityX);
+                rotationY = rotationY + (Input.GetAxis("Mouse Y") * sensitivityY);
             }
-            this.rotArrayY.Add(this.rotationY);
-            this.rotArrayX.Add(this.rotationX);
-            if (this.rotArrayY.Count >= this.frameCounter)
+            rotArrayY.Add(rotationY);
+            rotArrayX.Add(rotationX);
+            if (rotArrayY.Count >= frameCounter)
             {
-                this.rotArrayY.RemoveAt(0);
+                rotArrayY.RemoveAt(0);
             }
-            if (this.rotArrayX.Count >= this.frameCounter)
+            if (rotArrayX.Count >= frameCounter)
             {
-                this.rotArrayX.RemoveAt(0);
+                rotArrayX.RemoveAt(0);
             }
             int j = 0;
-            while (j < this.rotArrayY.Count)
+            while (j < rotArrayY.Count)
             {
-                tempFloat = (float) this.rotArrayY[j];
-                this.rotAverageY = this.rotAverageY + tempFloat;
+                tempFloat = (float) rotArrayY[j];
+                rotAverageY = rotAverageY + tempFloat;
                 j++;
             }
             int i = 0;
-            while (i < this.rotArrayX.Count)
+            while (i < rotArrayX.Count)
             {
-                tempFloat = (float) this.rotArrayX[i];
-                this.rotAverageX = this.rotAverageX + tempFloat;
+                tempFloat = (float) rotArrayX[i];
+                rotAverageX = rotAverageX + tempFloat;
                 i++;
             }
-            this.rotAverageY = this.rotAverageY / this.rotArrayY.Count;
-            this.rotAverageX = this.rotAverageX / this.rotArrayX.Count;
-            this.rotAverageY = Mathf.Clamp(this.rotAverageY, this.minimumY, this.maximumY);
-            this.rotAverageX = Mathf.Clamp(this.rotAverageX % 360, this.minimumX, this.maximumX);
-            this.yQuaternion = Quaternion.AngleAxis(this.rotAverageY, Vector3.left);
-            this.xQuaternion = Quaternion.AngleAxis(this.rotAverageX, Vector3.up);
-            this.transform.localRotation = (this.originalRotation * this.xQuaternion) * this.yQuaternion;
+            rotAverageY = rotAverageY / rotArrayY.Count;
+            rotAverageX = rotAverageX / rotArrayX.Count;
+            rotAverageY = Mathf.Clamp(rotAverageY, minimumY, maximumY);
+            rotAverageX = Mathf.Clamp(rotAverageX % 360, minimumX, maximumX);
+            yQuaternion = Quaternion.AngleAxis(rotAverageY, Vector3.left);
+            xQuaternion = Quaternion.AngleAxis(rotAverageX, Vector3.up);
+            transform.localRotation = (originalRotation * xQuaternion) * yQuaternion;
         }
         else
         {
-            if (this.Axis == Axes.MouseX)
+            if (Axis == Axes.MouseX)
             {
-                this.rotAverageX = 0;
-                if (Input.GetMouseButton(0) || !this.MouseDownRequired)
+                rotAverageX = 0;
+                if (Input.GetMouseButton(0) || !MouseDownRequired)
                 {
-                    this.rotationX = this.rotationX + (Input.GetAxis("Mouse X") * this.sensitivityX);
+                    rotationX = rotationX + (Input.GetAxis("Mouse X") * sensitivityX);
                 }
-                this.rotArrayX.Add(this.rotationX);
-                if (this.rotArrayX.Count >= this.frameCounter)
+                rotArrayX.Add(rotationX);
+                if (rotArrayX.Count >= frameCounter)
                 {
-                    this.rotArrayX.RemoveAt(0);
+                    rotArrayX.RemoveAt(0);
                 }
                 int i = 0;
-                while (i < this.rotArrayX.Count)
+                while (i < rotArrayX.Count)
                 {
-                    tempFloat = (float) this.rotArrayX[i];
-                    this.rotAverageX = this.rotAverageX + tempFloat;
+                    tempFloat = (float) rotArrayX[i];
+                    rotAverageX = rotAverageX + tempFloat;
                     i++;
                 }
-                this.rotAverageX = this.rotAverageX / this.rotArrayX.Count;
-                this.rotAverageX = Mathf.Clamp(this.rotAverageX % 360, this.minimumX, this.maximumX);
-                this.xQuaternion = Quaternion.AngleAxis(this.rotAverageX, Vector3.up);
-                this.transform.localRotation = this.originalRotation * this.xQuaternion;
+                rotAverageX = rotAverageX / rotArrayX.Count;
+                rotAverageX = Mathf.Clamp(rotAverageX % 360, minimumX, maximumX);
+                xQuaternion = Quaternion.AngleAxis(rotAverageX, Vector3.up);
+                transform.localRotation = originalRotation * xQuaternion;
             }
             else
             {
-                this.rotAverageY = 0;
-                if (Input.GetMouseButton(0) || !this.MouseDownRequired)
+                rotAverageY = 0;
+                if (Input.GetMouseButton(0) || !MouseDownRequired)
                 {
-                    this.rotationY = this.rotationY + (Input.GetAxis("Mouse Y") * this.sensitivityY);
+                    rotationY = rotationY + (Input.GetAxis("Mouse Y") * sensitivityY);
                 }
-                this.rotArrayY.Add(this.rotationY);
-                if (this.rotArrayY.Count >= this.frameCounter)
+                rotArrayY.Add(rotationY);
+                if (rotArrayY.Count >= frameCounter)
                 {
-                    this.rotArrayY.RemoveAt(0);
+                    rotArrayY.RemoveAt(0);
                 }
                 int j = 0;
-                while (j < this.rotArrayY.Count)
+                while (j < rotArrayY.Count)
                 {
-                    tempFloat = (float) this.rotArrayY[j];
-                    this.rotAverageY = this.rotAverageY + tempFloat;
+                    tempFloat = (float) rotArrayY[j];
+                    rotAverageY = rotAverageY + tempFloat;
                     j++;
                 }
-                this.rotAverageY = this.rotAverageY / this.rotArrayY.Count;
-                this.rotAverageY = Mathf.Clamp(this.rotAverageY % 360, this.minimumY, this.maximumY);
-                this.yQuaternion = Quaternion.AngleAxis(this.rotAverageY, Vector3.left);
-                this.transform.localRotation = this.originalRotation * this.yQuaternion;
+                rotAverageY = rotAverageY / rotArrayY.Count;
+                rotAverageY = Mathf.Clamp(rotAverageY % 360, minimumY, maximumY);
+                yQuaternion = Quaternion.AngleAxis(rotAverageY, Vector3.left);
+                transform.localRotation = originalRotation * yQuaternion;
             }
         }
     }
@@ -136,26 +136,26 @@ public partial class s3dSmoothMouseLook : MonoBehaviour
     public virtual void Start()
     {
         // Make the rigid body not change rotation
-        if (this.GetComponent<Rigidbody>())
+        if (GetComponent<Rigidbody>())
         {
-            this.GetComponent<Rigidbody>().freezeRotation = true;
+            GetComponent<Rigidbody>().freezeRotation = true;
         }
-        this.originalRotation = this.transform.localRotation;
+        originalRotation = transform.localRotation;
     }
 
     public s3dSmoothMouseLook()
     {
-        this.Axis = Axes.MouseXandY;
-        this.MouseDownRequired = true;
-        this.frameCounter = 20;
-        this.sensitivityX = 1f;
-        this.sensitivityY = 1f;
-        this.minimumX = -360f;
-        this.maximumX = 360f;
-        this.minimumY = -60f;
-        this.maximumY = 60f;
-        this.rotArrayX = new List<float>();
-        this.rotArrayY = new List<float>();
+        Axis = Axes.MouseXandY;
+        MouseDownRequired = true;
+        frameCounter = 20;
+        sensitivityX = 1f;
+        sensitivityY = 1f;
+        minimumX = -360f;
+        maximumX = 360f;
+        minimumY = -60f;
+        maximumY = 60f;
+        rotArrayX = new List<float>();
+        rotArrayY = new List<float>();
     }
 
 }

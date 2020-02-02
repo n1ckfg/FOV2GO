@@ -23,25 +23,25 @@ public class s3dWindowEditor : Editor
         if (s3dWindowEditor.foldout1)
         {
             EditorGUILayout.BeginVertical("box", new GUILayoutOption[] {});
-            this.target.on = EditorGUILayout.Toggle("Active", this.target.on, new GUILayoutOption[] {});
+            target.on = EditorGUILayout.Toggle("Active", target.on, new GUILayoutOption[] {});
             if (GUI.changed)
             {
-                EditorUtility.SetDirty(this.target);
-                this.target.toggleVis(this.target.on);
+                EditorUtility.SetDirty(target);
+                target.toggleVis(target.on);
             }
             GUI.changed = false;
-            this.target.drawDebugRays = EditorGUILayout.Toggle("Draw Debug Rays", this.target.drawDebugRays, new GUILayoutOption[] {});
-            this.target.sideSamples = (int) EditorGUILayout.Slider("Side Samples", (float) this.target.sideSamples, 3, 50, new GUILayoutOption[] {});
-            this.target.maskLimit = (maskDistance) EditorGUILayout.EnumPopup("Mask Limit", this.target.maskLimit, new GUILayoutOption[] {});
-            if (this.target.maskLimit == 0)
+            target.drawDebugRays = EditorGUILayout.Toggle("Draw Debug Rays", target.drawDebugRays, new GUILayoutOption[] {});
+            target.sideSamples = (int) EditorGUILayout.Slider("Side Samples", (float) target.sideSamples, 3, 50, new GUILayoutOption[] {});
+            target.maskLimit = (maskDistance) EditorGUILayout.EnumPopup("Mask Limit", target.maskLimit, new GUILayoutOption[] {});
+            if (target.maskLimit == 0)
             {
-                this.target.maximumDistance = EditorGUILayout.Slider("Maximum Distance", (float) this.target.maximumDistance, 0, 50, new GUILayoutOption[] {});
+                target.maximumDistance = EditorGUILayout.Slider("Maximum Distance", (float) target.maximumDistance, 0, 50, new GUILayoutOption[] {});
             }
             EditorGUILayout.EndVertical();
         }
         if (GUI.changed)
         {
-            EditorUtility.SetDirty(this.target);
+            EditorUtility.SetDirty(target);
         }
     }
 
